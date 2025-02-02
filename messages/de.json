@@ -1,0 +1,10 @@
+{
+  "HomePage": {
+    "title": "Hallo Welt!",
+    "about": "Zur Infoseite"
+  },
+  "LocaleSwitcher": {
+    "label": "Sprache ändern",
+    "locale": "{locale, select, de {Deutsch} en {English} other {Unknown}}"
+  }
+}
