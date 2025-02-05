@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String  @id @default(uuid())
+  clerkId   String  @unique
+  email     String  @unique
+  role      Role    @default(user)
+  createdAt DateTime @default(now())
+
+  templates Template[]  @relation("UserTemplates")
+  forms     Form[]      @relation("UserForms")
+  comments  Comment[]   @relation("UserComments")
+  likes     Like[]      @relation("UserLikes")
+}
+
+enum Role {
+  user
+  admin
+}
+
+model Template {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  theme       String?
+  imageUrl    String?
+  isPublic    Boolean  @default(true)
+  tags        String[]
+  createdAt   DateTime @default(now())
+  authorId    String
+  author      User     @relation("UserTemplates", fields: [authorId], references: [id])
+
+  questions Question[] @relation("TemplateQuestions")
+  forms     Form[]     @relation("TemplateForms")
+  comments  Comment[]  @relation("TemplateComments")
+  likes     Like[]     @relation("TemplateLikes")
+}
+
+model Question {
+  id         String   @id @default(uuid())
+  text       String
+  type       QuestionType
+  position   Int      @default(0)
+  templateId String
+  template   Template @relation("TemplateQuestions", fields: [templateId], references: [id])
+
+  Response Response[]
+}
+
+enum QuestionType {
+  SHORT_TEXT
+  LONG_TEXT
+  NUMBER
+  CHECKBOX
+}
+
+model Form {
+  id          String     @id @default(uuid())
+  userId      String
+  user        User       @relation("UserForms", fields: [userId], references: [id])
+  templateId  String
+  template    Template   @relation("TemplateForms", fields: [templateId], references: [id])
+  createdAt   DateTime   @default(now())
+
+  responses Response[]  @relation("FormResponses")
+}
+
+model Response {
+  id        String   @id @default(uuid())
+  formId    String
+  form      Form     @relation("FormResponses", fields: [formId], references: [id])
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  answer    String
+}
+
+model Comment {
+  id          String   @id @default(uuid())
+  text        String
+  createdAt   DateTime @default(now())
+  userId      String
+  user        User     @relation("UserComments", fields: [userId], references: [id])
+  templateId  String
+  template    Template @relation("TemplateComments", fields: [templateId], references: [id])
+}
+
+model Like {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation("UserLikes", fields: [userId], references: [id])
+  templateId  String
+  template    Template @relation("TemplateLikes", fields: [templateId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, templateId])
+}

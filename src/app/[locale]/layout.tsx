@@ -8,6 +8,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import { ClerkProvider } from '@clerk/nextjs';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,13 +39,15 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} {...mantineHtmlProps}>
-      <head>{/* <ColorSchemeScript /> */}</head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>{children}</ThemeProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang={locale} {...mantineHtmlProps}>
+        <head>{/* <ColorSchemeScript /> */}</head>
+        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <NextIntlClientProvider messages={messages}>
+            <ThemeProvider>{children}</ThemeProvider>
+          </NextIntlClientProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

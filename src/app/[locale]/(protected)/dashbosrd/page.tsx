@@ -1,15 +1,15 @@
 import { useTranslations } from 'next-intl';
 import React from 'react';
 
-const Dashboard = () => {
+const DashboardPage = () => {
   // const t = useTranslations("Dashboard translates");
 
   return (
     <div>
-      Dashboard
+      Dashboard page
       {/* <p>{t("title")}</p> */}
     </div>
   );
 };
 
-export default Dashboard;
+export default DashboardPage;
