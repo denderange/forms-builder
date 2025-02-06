@@ -5,7 +5,7 @@ import React from 'react';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import { Link } from '@/i18n/routing';
-import { SignInButton, useAuth, UserButton } from '@clerk/nextjs';
+import { SignInButton as SingButton, useAuth, UserButton } from '@clerk/nextjs';
 import { currentUser } from '@clerk/nextjs/server';
 
 const Header = () => {
@@ -27,9 +27,11 @@ const Header = () => {
         {isSignedIn ? (
           <UserButton afterSwitchSessionUrl="/" />
         ) : (
-          <SignInButton mode="modal">
-            <Button size="compact-md">Войти</Button>
-          </SignInButton>
+          <div>
+            <SingButton mode="modal">
+              <Button size="compact-md">Войти</Button>
+            </SingButton>
+          </div>
         )}
       </Group>
       <Group>

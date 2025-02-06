@@ -19,7 +19,8 @@
     "next-intl": "^3.26.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-redux": "^9.2.0"
+    "react-redux": "^9.2.0",
+    "svix": "^1.45.1"
   },
   "devDependencies": {
     "@types/node": "^20",

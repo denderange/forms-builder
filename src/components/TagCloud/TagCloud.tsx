@@ -1,25 +1,35 @@
-import { Flex, Text } from '@mantine/core';
-import React from 'react';
+import { Link } from '@/i18n/routing';
+import { getTags } from '@/lib/templateService';
+import { Button, Flex, Group, Text, Title } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
 
-type TagCloudProps = {
-  tags: string[];
-};
+const TagCloud = () => {
+  const [tags, setTags] = useState<string[]>([]);
 
-const TagCloud = ({ tags }: TagCloudProps) => {
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const tagData = await getTags();
+
+        setTags(tagData);
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
   return (
-    <Flex
-    // className="flex flex-wrap gap-2"
-    >
-      {tags.map((tag, index) => (
-        <Text
-          span
-          key={index}
-          className="bg-blue-100 text-blue-600 px-3 py-1 rounded"
-        >
-          {tag}
-        </Text>
-      ))}
-    </Flex>
+    <Group my="md">
+      <Title order={2}>Теги</Title>
+      <Group>
+        {tags.map((tag, index) => (
+          <Link href={`/search?tag=${tag}`} key={index}>
+            <Button>{tag}</Button>
+          </Link>
+        ))}
+      </Group>
+    </Group>
   );
 };
 

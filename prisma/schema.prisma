@@ -25,6 +25,12 @@ enum Role {
   admin
 }
 
+model Tag {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  templates Template[] @relation("TemplateTags")
+}
+
 model Template {
   id          String   @id @default(uuid())
   title       String
@@ -32,7 +38,7 @@ model Template {
   theme       String?
   imageUrl    String?
   isPublic    Boolean  @default(true)
-  tags        String[]
+  tags        Tag[]    @relation("TemplateTags")
   createdAt   DateTime @default(now())
   authorId    String
   author      User     @relation("UserTemplates", fields: [authorId], references: [id])
