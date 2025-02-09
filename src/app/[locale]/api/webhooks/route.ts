@@ -1,6 +1,7 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
+import { db } from '@/lib/db';
 
 export async function POST(req: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET;
@@ -56,6 +57,25 @@ export async function POST(req: Request) {
 
   if (evt.type === 'user.created') {
     console.log('userId:', evt.data.id);
+
+    const existingUser = await db.user.findUnique({
+      where: { clerkId: id },
+    });
+
+    if (!existingUser) {
+      if (id) {
+        const newUser = await db.user.create({
+          data: { clerkId: id },
+        });
+
+        return Response.json({ message: 'User created', user: newUser });
+      } else {
+        return Response.json({
+          message: 'User already exists',
+          user: existingUser,
+        });
+      }
+    }
   }
 
   return new Response('Webhook received', { status: 200 });
