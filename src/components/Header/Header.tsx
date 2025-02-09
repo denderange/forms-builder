@@ -6,7 +6,7 @@ import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { SquarePen } from 'lucide-react';
 import Logo from '../Logo/Logo';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import ClerkButtons from '../ClerkButtons/ClerkButtons';
 
 const Header = () => {

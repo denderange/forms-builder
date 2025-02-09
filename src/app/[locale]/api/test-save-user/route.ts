@@ -3,7 +3,7 @@ import { db } from '@/lib/db';
 
 export async function GET() {
   try {
-    const userId = 'test-clerk-id-123';
+    const userId = 'test-clerk-id-12345';
 
     const existingUser = await db.user.findUnique({
       where: { clerkId: userId },

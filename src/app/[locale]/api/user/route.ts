@@ -11,7 +11,7 @@ export async function GET() {
 
   const user = await db.user.findUnique({
     where: { clerkId: userId },
-    select: { id: true, email: true, role: true, createdAt: true },
+    select: { id: true, clerkId: true, role: true, createdAt: true },
   });
 
   if (!user) {
@@ -19,4 +19,34 @@ export async function GET() {
   }
 
   return NextResponse.json(user);
+}
+
+export async function POST(req: Request) {
+  try {
+    const { userId } = await req.json();
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const existingUser = await db.user.findUnique({
+      where: { clerkId: userId },
+    });
+
+    if (!existingUser) {
+      await db.user.create({ data: { clerkId: userId } });
+      console.log(`User with ID ${userId} has been saved in the database`);
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Error saving user:', error);
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
 }

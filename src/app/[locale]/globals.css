@@ -1,5 +1,8 @@
-.logo {
+a {
   text-decoration: none;
+}
+
+.logo {
   color: var(--mantine-color-cyan-8);
 }
 

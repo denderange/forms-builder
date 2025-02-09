@@ -1,8 +1,8 @@
 import Logo from '@/components/Logo/Logo';
 import { SignIn } from '@clerk/nextjs';
-import { Box, Center, Group } from '@mantine/core';
+import { Box, Center } from '@mantine/core';
 
-export default function Page() {
+export default async function Page() {
   return (
     <Box mx={'auto'} py={'lg'}>
       <Center my={'lg'} pb={'lg'}>

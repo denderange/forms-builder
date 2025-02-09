@@ -1,40 +1,41 @@
-'use client';
+import { Button, Title, Container, Stack, Card, Text } from '@mantine/core';
+import Link from 'next/link';
+import { db } from '@/lib/db';
+import { auth } from '@clerk/nextjs/server';
 
-import { useRouter } from 'next/navigation';
-import { Button, Title, Container } from '@mantine/core';
+export default async function CreateTemplatePage() {
+  const { userId } = await auth();
+  if (!userId) return <p>Вы должны войти в систему</p>;
 
-export default function CreateTemplatePage() {
-  const router = useRouter();
-
-  const handleCreateForm = async () => {
-    try {
-      const response = await fetch('/api/forms', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: 'Новая форма',
-          description: '',
-          questions: [],
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Ошибка создания формы');
-      }
-
-      const form = await response.json();
-      router.push(`/create/${form.id}`);
-    } catch (error) {
-      console.error('Ошибка при создании формы:', error);
-    }
-  };
+  const forms = await db.form.findMany({
+    where: { userId },
+    select: { id: true, template: { select: { title: true } } },
+    orderBy: { createdAt: 'desc' },
+  });
 
   return (
-    <Container>
-      <Title order={1}>Создать новую форму</Title>
-      <Button mt="lg" onClick={handleCreateForm}>
-        Пустая форма
-      </Button>
+    <Container size="sm">
+      <Title order={2}>Создать форму</Title>
+      <Stack gap="md">
+        <Card withBorder shadow="sm">
+          <Link href="/create/new">
+            <Button fullWidth>Создать новую форму</Button>
+          </Link>
+        </Card>
+
+        {forms.length > 0 && (
+          <>
+            <Title order={3}>Ваши формы</Title>
+            {forms.map((form) => (
+              <Card key={form.id} withBorder shadow="sm">
+                <Link href={`/create/${form.id}`}>
+                  <Text>{form.template?.title || 'Без названия'}</Text>
+                </Link>
+              </Card>
+            ))}
+          </>
+        )}
+      </Stack>
     </Container>
   );
 }
