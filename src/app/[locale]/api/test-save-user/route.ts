@@ -25,5 +25,4 @@ export async function GET() {
     console.error('Error saving user:', error);
     return NextResponse.json({ error: 'Failed to save user' }, { status: 500 });
   }
-  return { message: 'hello' };
 }
