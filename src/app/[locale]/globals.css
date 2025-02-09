@@ -1,0 +1,8 @@
+.logo {
+  text-decoration: none;
+  color: var(--mantine-color-cyan-8);
+}
+
+.logo:visited {
+  color: var(--mantine-color-cyan-8);
+}

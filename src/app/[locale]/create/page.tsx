@@ -1,21 +1,40 @@
 'use client';
-import { auth, currentUser } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
 
-export default async function CreateTemplatePage() {
-  const { userId } = await auth();
+import { useRouter } from 'next/navigation';
+import { Button, Title, Container } from '@mantine/core';
 
-  // if (!userId) {
-  //   redirect('/sign-in');
-  // }
+export default function CreateTemplatePage() {
+  const router = useRouter();
 
-  const user = await currentUser();
+  const handleCreateForm = async () => {
+    try {
+      const response = await fetch('/api/forms', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: 'Новая форма',
+          description: '',
+          questions: [],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Ошибка создания формы');
+      }
+
+      const form = await response.json();
+      router.push(`/create/${form.id}`);
+    } catch (error) {
+      console.error('Ошибка при создании формы:', error);
+    }
+  };
 
   return (
-    <div className="container mx-auto p-6">
-      {user && <div>Welcome, {user.firstName}!</div>}
-      <h1 className="text-2xl font-bold">Создать новый шаблон</h1>
-      <p>Тут будет форма для создания шаблона.</p>
-    </div>
+    <Container>
+      <Title order={1}>Создать новую форму</Title>
+      <Button mt="lg" onClick={handleCreateForm}>
+        Пустая форма
+      </Button>
+    </Container>
   );
 }

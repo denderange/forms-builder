@@ -15,8 +15,8 @@ export const ThemeToggle = () => {
   };
 
   return (
-    <Button variant="default" size="compact-md" onClick={toggleColorScheme}>
-      {computedColorScheme === 'dark' ? <Moon size={20} /> : <Sun size={20} />}
+    <Button variant="default" px={'sm'} onClick={toggleColorScheme}>
+      {computedColorScheme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
     </Button>
   );
 };

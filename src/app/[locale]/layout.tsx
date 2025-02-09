@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import '@mantine/core/styles.css';
-import { ColorSchemeScript, mantineHtmlProps } from '@mantine/core';
+import { ColorSchemeScript, Container, mantineHtmlProps } from '@mantine/core';
 import './globals.css';
 import ThemeProvider from '@/providers/ThemeProvider';
 import { NextIntlClientProvider } from 'next-intl';
@@ -44,7 +44,18 @@ export default async function RootLayout({
         <head>{/* <ColorSchemeScript /> */}</head>
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <NextIntlClientProvider messages={messages}>
-            <ThemeProvider>{children}</ThemeProvider>
+            <ThemeProvider>
+              <Container
+                size={'xl'}
+                style={{
+                  minHeight: '100vh',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                {children}
+              </Container>
+            </ThemeProvider>
           </NextIntlClientProvider>
         </body>
       </html>
