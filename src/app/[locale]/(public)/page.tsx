@@ -14,7 +14,7 @@ export default function Home() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('/api/test');
+      const response = await fetch('/:locale/api/test');
       const data = await response.json();
       console.log(data); // { message: "Hello from API!" }
     } catch (error) {
@@ -24,7 +24,7 @@ export default function Home() {
 
   return (
     <>
-      <div>v-prod-#3</div>
+      <div>v-prod-#9</div>
       <Header />
       <Templates />
       <PopularTemplates />

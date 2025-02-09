@@ -5,10 +5,20 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { Moon, Sun } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export const ThemeToggle = () => {
-  const { colorScheme, setColorScheme } = useMantineColorScheme();
+  const { setColorScheme } = useMantineColorScheme();
   const computedColorScheme = useComputedColorScheme('light');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   const toggleColorScheme = () => {
     setColorScheme(computedColorScheme === 'dark' ? 'light' : 'dark');

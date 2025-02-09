@@ -1,19 +1,14 @@
+'use client';
 import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
-import { Box, Button } from '@mantine/core';
-import { UserRoundPen } from 'lucide-react';
+import { Box } from '@mantine/core';
+import ButtonSignIn from '../ButtonSignIn/ButtonSignIn';
 
-const ClerkButtons = () => {
+export default function ClerkButtons() {
   return (
     <Box>
       <SignedOut>
         <SignInButton>
-          <Button
-            variant="gradient"
-            gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
-            leftSection={<UserRoundPen size={14} />}
-          >
-            Sign In
-          </Button>
+          <ButtonSignIn />
         </SignInButton>
       </SignedOut>
       <SignedIn>
@@ -21,6 +16,4 @@ const ClerkButtons = () => {
       </SignedIn>
     </Box>
   );
-};
-
-export default ClerkButtons;
+}
