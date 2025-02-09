@@ -8,7 +8,8 @@ export default function ClerkButtons() {
     <Box>
       <SignedOut>
         <SignInButton>
-          <ButtonSignIn />
+          {/* <ButtonSignIn /> */}
+          <button>-=Sign in=-</button>
         </SignInButton>
       </SignedOut>
       <SignedIn>
