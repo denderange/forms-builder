@@ -14,22 +14,20 @@ const isAdminRoute = createRouteMatcher(['/:locale/admin(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
   const { pathname } = req.nextUrl;
-  const isApiRoute = pathname.startsWith('/api');
 
-  if (isApiRoute) {
+  if (pathname.startsWith('/api')) {
     return NextResponse.next();
   }
-  // if (req.nextUrl.pathname.startsWith('/api/webhooks')) {
-  //   return NextResponse.next();
-  // }
 
   if (isProtectedRoute(req)) {
     await auth.protect();
   }
 
+  const authResult = await auth();
+
   if (
     isAdminRoute(req) &&
-    (await auth()).sessionClaims?.metadata?.role !== 'admin'
+    authResult.sessionClaims?.metadata?.role !== 'admin'
   ) {
     const url = new URL('/', req.url);
     return NextResponse.redirect(url);

@@ -58,16 +58,15 @@ export async function POST(req: Request) {
   if (evt.type === 'user.created') {
     console.log('userId:', evt.data.id);
 
-    const existingUser = await db.user.findUnique({
-      where: { clerkId: id },
-    });
+    try {
+      const existingUser = await db.user.findUnique({
+        where: { clerkId: id },
+      });
 
-    if (!existingUser) {
-      if (id) {
+      if (!existingUser && id) {
         const newUser = await db.user.create({
           data: { clerkId: id },
         });
-
         return Response.json({ message: 'User created', user: newUser });
       } else {
         return Response.json({
@@ -75,6 +74,9 @@ export async function POST(req: Request) {
           user: existingUser,
         });
       }
+    } catch (error) {
+      console.error('Database error:', error);
+      return new Response('Internal Server Error', { status: 500 });
     }
   }
 
