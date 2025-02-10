@@ -8,4 +8,5 @@ a {
 
 .logo:visited {
   color: var(--mantine-color-cyan-8);
+  /* color: #6b6b6b */
 }

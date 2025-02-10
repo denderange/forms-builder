@@ -72,6 +72,9 @@ model Form {
   user        User       @relation("UserForms", fields: [userId], references: [id])
   templateId  String
   template    Template   @relation("TemplateForms", fields: [templateId], references: [id])
+  title       String 
+  description String?
+  questions   Json 
   createdAt   DateTime   @default(now())
 
   responses Response[]  @relation("FormResponses")

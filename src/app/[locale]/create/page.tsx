@@ -1,11 +1,28 @@
-import { Button, Title, Container, Stack, Card, Text } from '@mantine/core';
+import {
+  Button,
+  Title,
+  Container,
+  Stack,
+  Card,
+  Text,
+  CardSection,
+  Box,
+  Flex,
+} from '@mantine/core';
 import Link from 'next/link';
 import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
+import { ClipboardPlus } from 'lucide-react';
 
 export default async function CreateTemplatePage() {
   const { userId } = await auth();
-  if (!userId) return <p>Вы должны войти в систему</p>;
+  if (!userId)
+    return (
+      <Container>
+        <Text>Для создания форм необходимо войти в систему.</Text>
+        <Link href="/sign-in">Войти</Link>
+      </Container>
+    );
 
   const forms = await db.form.findMany({
     where: { userId },
@@ -14,14 +31,22 @@ export default async function CreateTemplatePage() {
   });
 
   return (
-    <Container size="sm">
+    <>
+      <div>v#2</div>
       <Title order={2}>Создать форму</Title>
       <Stack gap="md">
-        <Card withBorder shadow="sm">
-          <Link href="/create/new">
-            <Button fullWidth>Создать новую форму</Button>
-          </Link>
-        </Card>
+        <Box maw={200}>
+          <Card withBorder shadow="sm">
+            <CardSection>
+              <Flex justify="center">
+                <ClipboardPlus size={160} color="#007694" />
+              </Flex>
+            </CardSection>
+            <Link href="/create/new">
+              <Button fullWidth>Создать новую форму</Button>
+            </Link>
+          </Card>
+        </Box>
 
         {forms.length > 0 && (
           <>
@@ -36,6 +61,6 @@ export default async function CreateTemplatePage() {
           </>
         )}
       </Stack>
-    </Container>
+    </>
   );
 }

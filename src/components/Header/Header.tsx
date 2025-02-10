@@ -13,7 +13,13 @@ const Header = () => {
   const t = useTranslations('HomePage');
 
   return (
-    <Group justify="space-between" py={'md'} gap={'xl'} component={'header'}>
+    <Group
+      justify="space-between"
+      py={'md'}
+      gap={'xl'}
+      component={'header'}
+      align="center"
+    >
       <Logo />
       {/* <Title variant="h5">{t('title')}</Title> */}
       <TextInput placeholder="Поиск..." style={{ flexGrow: '1' }} />

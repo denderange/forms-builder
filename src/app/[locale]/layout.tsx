@@ -14,7 +14,6 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { ClerkProvider } from '@clerk/nextjs';
-import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 
 const geistSans = Geist({
