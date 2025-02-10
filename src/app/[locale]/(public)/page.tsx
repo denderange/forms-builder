@@ -1,8 +1,6 @@
 'use client';
-import { Flex } from '@mantine/core';
 import { useTranslations } from 'next-intl';
 import TagCloud from '@/components/TagCloud/TagCloud';
-import Footer from '@/components/Footer/Footer';
 import PopularTemplates from '@/components/PopularTemplates/PopularTemplates';
 import Templates from '@/components/Tmplates/Tmplates';
 import Header from '@/components/Header/Header';
@@ -24,7 +22,7 @@ export default function Home() {
 
   return (
     <>
-      <div>v-prod-#16</div>
+      <div>v-prod-#17</div>
       <Header />
       <Templates />
       <PopularTemplates />
