@@ -18,6 +18,9 @@ import {
 } from '@mantine/core';
 import { Plus, TicketPlus, Trash, X } from 'lucide-react';
 import { useState } from 'react';
+import { TextAnswer } from '../Answers/TextAnswer/TextAnswer';
+import { RadioAnswer } from '../Answers/RadioAnswer/RadioAnswer';
+import { CheckboxAnswer } from '../Answers/CheckboxAnswer/CheckboxAnswer';
 
 type QuestionItemProps = {
   id: number;
@@ -58,6 +61,7 @@ export default function QuestionItem({
     <Card withBorder p="sm" bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}>
       <Group justify="space-between">
         <TextInput
+          description="Question"
           placeholder="Вопрос"
           value={text}
           onChange={(e) => onTextChange(id, e.target.value)}
@@ -77,6 +81,7 @@ export default function QuestionItem({
 
       <Group mt="lg" justify="space-between">
         <Select
+          description="Type of answer options"
           placeholder="Pick option"
           data={[
             { value: 'text', label: 'Текст' },
@@ -91,7 +96,24 @@ export default function QuestionItem({
 
       {/* Динамическое отображение полей */}
       <Stack mt="md">
-        {type === 'text' && (
+        {type === 'text' && <TextAnswer />}
+        {type === 'radio' && (
+          <RadioAnswer
+            options={options}
+            addOption={addOption}
+            updateOption={updateOption}
+            removeOption={removeOption}
+          />
+        )}
+        {type === 'checkbox' && (
+          <CheckboxAnswer
+            options={options}
+            addOption={addOption}
+            updateOption={updateOption}
+            removeOption={removeOption}
+          />
+        )}
+        {/* {type === 'text' && (
           <TextInput placeholder="Ответ пользователя" disabled />
         )}
 
@@ -163,7 +185,7 @@ export default function QuestionItem({
               Добавить вариант
             </Button>
           </>
-        )}
+        )} */}
       </Stack>
     </Card>
   );

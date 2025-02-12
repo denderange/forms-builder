@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   TextInput,
@@ -79,6 +79,10 @@ export default function NewFormPage() {
     }
   };
 
+  useEffect(() => {
+    !questions.length && addQuestion();
+  }, []);
+
   return (
     <Box>
       <Title order={2} size={30} c={'gray.5'}>
@@ -111,7 +115,6 @@ export default function NewFormPage() {
 
           <QuestionList
             questions={questions}
-            onAddQuestion={addQuestion}
             onRemoveQuestion={removeQuestion}
             onTextChange={updateQuestionText}
             onTypeChange={updateQuestionType}

@@ -5,7 +5,6 @@ type Question = { id: number; text: string; type: string };
 
 type QuestionListProps = {
   questions: Question[];
-  onAddQuestion: () => void;
   onRemoveQuestion: (id: number) => void;
   onTextChange: (id: number, text: string) => void;
   onTypeChange: (id: number, type: string) => void;
@@ -13,7 +12,6 @@ type QuestionListProps = {
 
 export default function QuestionList({
   questions,
-  onAddQuestion,
   onRemoveQuestion,
   onTextChange,
   onTypeChange,
@@ -31,8 +29,6 @@ export default function QuestionList({
           onRemove={onRemoveQuestion}
         />
       ))}
-
-      {/* <Button onClick={onAddQuestion}>Добавить вопрос</Button> */}
     </Stack>
   );
 }
