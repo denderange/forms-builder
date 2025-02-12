@@ -1,9 +1,10 @@
-import { Card, Text } from '@mantine/core';
+import { Card, Stack, Text } from '@mantine/core';
 
 type Props = {
   id: string;
   text: string;
   type: string;
+  options?: { id: string; text: string }[];
   onSetActive: (id: string) => void;
 };
 
@@ -11,6 +12,7 @@ export default function QuestionPreview({
   id,
   text,
   type,
+  options = [],
   onSetActive,
 }: Props) {
   return (
@@ -28,6 +30,16 @@ export default function QuestionPreview({
           ? 'Один вариант'
           : 'Несколько вариантов'}
       </Text>
+
+      {options.length > 0 && (
+        <Stack mt="sm">
+          {options.map((opt) => (
+            <Text key={opt.id} size="sm">
+              - {opt.text || 'Без текста'}
+            </Text>
+          ))}
+        </Stack>
+      )}
     </Card>
   );
 }

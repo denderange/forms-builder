@@ -7,7 +7,7 @@ import {
   Tooltip,
 } from '@mantine/core';
 import { Trash } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TextAnswer } from '../../Answers/TextAnswer/TextAnswer';
 import { RadioAnswer } from '../../Answers/RadioAnswer/RadioAnswer';
 import { CheckboxAnswer } from '../../Answers/CheckboxAnswer/CheckboxAnswer';
@@ -19,39 +19,46 @@ type Props = {
   id: string;
   text: string;
   type: string;
+  options: { id: string; text: string }[];
   onTextChange: (id: string, text: string) => void;
   onTypeChange: (id: string, type: string) => void;
   onRemove: (id: string) => void;
+  onOptionsChange: (
+    id: string,
+    options: { id: string; text: string }[]
+  ) => void;
 };
 
 export default function QuestionItem({
   id,
   text,
   type,
+  options,
   onTextChange,
   onTypeChange,
   onRemove,
+  onOptionsChange,
 }: Props) {
   const colorScheme = useColorScheme();
-  const [options, setOptions] = useState<{ id: string; text: string }[]>([
-    { id: uuidv4(), text: '' },
-  ]);
 
   // Добавить вариант ответа
   const addOption = () => {
-    setOptions([...options, { id: uuidv4(), text: '' }]);
+    const newOptions = [...options, { id: uuidv4(), text: '' }];
+    onOptionsChange(id, newOptions);
   };
 
   // Удалить вариант
   const removeOption = (id: string) => {
-    setOptions(options.filter((opt) => opt.id !== id));
+    const newOptions = options.filter((opt) => opt.id !== id);
+    onOptionsChange(id, newOptions);
   };
 
   // Обновить текст варианта ответа
   const updateOption = (id: string, newText: string) => {
-    setOptions(
-      options.map((opt) => (opt.id === id ? { ...opt, text: newText } : opt))
+    const newOptions = options.map((opt) =>
+      opt.id === id ? { ...opt, text: newText } : opt
     );
+    onOptionsChange(id, newOptions);
   };
 
   return (

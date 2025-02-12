@@ -2,23 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  TextInput,
-  Textarea,
-  Button,
-  Container,
-  Title,
-  Stack,
-  Box,
-  Group,
-} from '@mantine/core';
+import { Button, Container, Title, Stack, Box, Group } from '@mantine/core';
 import QuestionList from '@/components/Questions/QuestionList/QuestionList';
 import { HardDriveDownload, Plus } from 'lucide-react';
-import { useColorScheme } from '@mantine/hooks';
 import { v4 as uuidv4 } from 'uuid';
+import { FormMeta } from '@/components/FormMeta/FormMeta';
 
 export default function NewFormPage() {
-  const colorScheme = useColorScheme();
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -59,6 +49,15 @@ export default function NewFormPage() {
     setActiveQuestionId(id);
   };
 
+  const updateQuestionOptions = (
+    id: string,
+    newOptions: { id: string; text: string }[]
+  ) => {
+    setQuestions(
+      questions.map((q) => (q.id === id ? { ...q, options: newOptions } : q))
+    );
+  };
+
   // Сохранение формы
   const handleSave = async () => {
     if (!title) return alert('Введите название формы');
@@ -95,26 +94,12 @@ export default function NewFormPage() {
       </Title>
       <Container size={'sm'} mt={'lg'}>
         <Stack gap="md">
-          <Box
-            p={'lg'}
-            style={{ borderRadius: '10px' }}
-            bg={colorScheme === 'dark' ? 'gray.7' : 'cyan.0'}
-          >
-            <TextInput
-              label="Название"
-              placeholder="Введите название формы"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-
-            <Textarea
-              label="Описание"
-              placeholder="Введите описание (необязательно)"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </Box>
+          <FormMeta
+            title={title}
+            description={description}
+            setTitle={setTitle}
+            setDescription={setDescription}
+          />
 
           <Title order={4}>Вопросы</Title>
 
@@ -125,6 +110,7 @@ export default function NewFormPage() {
             onRemoveQuestion={removeQuestion}
             onTextChange={updateQuestionText}
             onTypeChange={updateQuestionType}
+            onOptionsChange={updateQuestionOptions}
           />
 
           <Group justify="space-between">

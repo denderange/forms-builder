@@ -2,7 +2,12 @@ import { Stack } from '@mantine/core';
 import QuestionItem from '../QuestionItem/QuestionItem';
 import QuestionPreview from '../QuestionPreview/QuestionPreview';
 
-type Question = { id: string; text: string; type: string };
+type Question = {
+  id: string;
+  text: string;
+  type: string;
+  options?: { id: string; text: string }[];
+};
 
 type Props = {
   questions: Question[];
@@ -11,6 +16,10 @@ type Props = {
   onRemoveQuestion: (id: string) => void;
   onTextChange: (id: string, text: string) => void;
   onTypeChange: (id: string, type: string) => void;
+  onOptionsChange: (
+    id: string,
+    options: { id: string; text: string }[]
+  ) => void;
 };
 
 export default function QuestionList({
@@ -20,6 +29,7 @@ export default function QuestionList({
   onRemoveQuestion,
   onTextChange,
   onTypeChange,
+  onOptionsChange,
 }: Props) {
   return (
     <Stack>
@@ -33,6 +43,8 @@ export default function QuestionList({
             onTextChange={onTextChange}
             onTypeChange={onTypeChange}
             onRemove={onRemoveQuestion}
+            options={q.options || []}
+            onOptionsChange={onOptionsChange}
           />
         ) : (
           <QuestionPreview
