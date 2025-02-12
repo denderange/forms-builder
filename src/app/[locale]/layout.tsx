@@ -63,6 +63,7 @@ export default async function RootLayout({
                   direction={'column'}
                   style={{ flexGrow: '1' }}
                   component={'main'}
+                  pb={'xl'}
                 >
                   {children}
                 </Flex>

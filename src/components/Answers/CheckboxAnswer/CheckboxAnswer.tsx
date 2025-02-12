@@ -6,13 +6,15 @@ import {
   CloseButton,
 } from '@mantine/core';
 import { X } from 'lucide-react';
-import { ButtonAddOption } from '@/components/ButtonAddOption/ButtonAddOption';
+import { ButtonAddOption } from '@/components/Buttons/ButtonAddOption/ButtonAddOption';
+
+type Option = { id: string; text: string };
 
 type Props = {
-  options: string[];
+  options: Option[];
   addOption: () => void;
-  updateOption: (index: number, text: string) => void;
-  removeOption: (index: number) => void;
+  updateOption: (id: string, text: string) => void;
+  removeOption: (id: string) => void;
 };
 
 export function CheckboxAnswer({
@@ -27,10 +29,10 @@ export function CheckboxAnswer({
         {options.map((option, index) => (
           <Group key={index} justify="space-between" my="md">
             <Group style={{ flex: '1' }}>
-              <Checkbox value={option} />
+              <Checkbox value={option.text} />
               <TextInput
-                value={option}
-                onChange={(e) => updateOption(index, e.target.value)}
+                value={option.text}
+                onChange={(e) => updateOption(option.id, e.target.value)}
                 placeholder="Введите вариант"
                 variant="unstyled"
                 style={{
@@ -42,8 +44,8 @@ export function CheckboxAnswer({
               />
             </Group>
             <CloseButton
-              icon={<X size={18} color="#be004f" />}
-              onClick={() => removeOption(index)}
+              icon={<X size={18} color="#d6336c" />}
+              onClick={() => removeOption(option.id)}
               size="xs"
             />
           </Group>

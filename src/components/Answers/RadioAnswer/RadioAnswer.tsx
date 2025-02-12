@@ -1,12 +1,20 @@
-import { ButtonAddOption } from '@/components/ButtonAddOption/ButtonAddOption';
-import { Group, RadioGroup, Radio, TextInput } from '@mantine/core';
-import { Trash } from 'lucide-react';
+import { ButtonAddOption } from '@/components/Buttons/ButtonAddOption/ButtonAddOption';
+import {
+  Group,
+  RadioGroup,
+  Radio,
+  TextInput,
+  CloseButton,
+} from '@mantine/core';
+import { X } from 'lucide-react';
+
+type Option = { id: string; text: string };
 
 type Props = {
-  options: string[];
+  options: Option[];
   addOption: () => void;
-  updateOption: (index: number, text: string) => void;
-  removeOption: (index: number) => void;
+  updateOption: (id: string, text: string) => void;
+  removeOption: (id: string) => void;
 };
 
 export function RadioAnswer({
@@ -19,17 +27,26 @@ export function RadioAnswer({
     <>
       <RadioGroup>
         {options.map((option, index) => (
-          <Group key={index} justify="space-between">
-            <Radio value={option} label={option || 'Вариант ответа'} />
-            <TextInput
-              value={option}
-              onChange={(e) => updateOption(index, e.target.value)}
-              placeholder="Введите вариант"
-            />
-            <Trash
-              size={16}
-              onClick={() => removeOption(index)}
-              style={{ cursor: 'pointer', color: 'red' }}
+          <Group key={index} justify="space-between" my="md">
+            <Group style={{ flex: '1' }}>
+              <Radio value={option.text} />
+              <TextInput
+                value={option.text}
+                onChange={(e) => updateOption(option.id, e.target.value)}
+                placeholder="Введите вариант"
+                variant="unstyled"
+                style={{
+                  backgroundColor: 'white',
+                  borderBottom: '1px solid #a5a5a5',
+                  flex: '1',
+                  marginTop: '-5px',
+                }}
+              />
+            </Group>
+            <CloseButton
+              icon={<X size={18} color="#d6336c" />}
+              onClick={() => removeOption(option.id)}
+              size="xs"
             />
           </Group>
         ))}

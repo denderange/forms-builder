@@ -7,7 +7,7 @@ import { SquarePen } from 'lucide-react';
 import Logo from '../Logo/Logo';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import { Link, usePathname } from '@/i18n/routing';
-import ClerkButtons from '../ClerkButtons/ClerkButtons';
+import ClerkButtons from '../Buttons/ClerkButtons/ClerkButtons';
 
 const Header = () => {
   const t = useTranslations('HomePage');

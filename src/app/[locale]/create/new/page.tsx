@@ -9,49 +9,54 @@ import {
   Container,
   Title,
   Stack,
-  Card,
-  Center,
   Box,
-  useMantineTheme,
-  useMantineColorScheme,
   Group,
-  Text,
 } from '@mantine/core';
-import QuestionList from '@/components/QuestionList/QuestionList';
+import QuestionList from '@/components/Questions/QuestionList/QuestionList';
 import { HardDriveDownload, Plus } from 'lucide-react';
+import { useColorScheme } from '@mantine/hooks';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function NewFormPage() {
-  const { colorScheme } = useMantineColorScheme();
+  const colorScheme = useColorScheme();
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [questions, setQuestions] = useState<
-    { id: number; text: string; type: string }[]
+    { id: string; text: string; type: string }[]
   >([]);
+  const [activeQuestionId, setActiveQuestionId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Добавить новый вопрос
+  // Добавить новый вопрос и сделать его активным
   const addQuestion = () => {
-    setQuestions([...questions, { id: Date.now(), text: '', type: 'text' }]);
+    const newQuestion = { id: uuidv4(), text: '', type: 'text' };
+    setQuestions([...questions, newQuestion]);
+    setActiveQuestionId(newQuestion.id);
   };
 
   // Удалить вопрос
-  const removeQuestion = (id: number) => {
+  const removeQuestion = (id: string) => {
     setQuestions(questions.filter((q) => q.id !== id));
+    if (activeQuestionId === id) {
+      setActiveQuestionId(null);
+    }
   };
 
-  // Изменить текст вопроса
-  const updateQuestionText = (id: number, newText: string) => {
+  // Изменить текст вопроса и активировать его
+  const updateQuestionText = (id: string, newText: string) => {
     setQuestions(
       questions.map((q) => (q.id === id ? { ...q, text: newText } : q))
     );
+    setActiveQuestionId(id);
   };
 
   // Изменить тип вопроса
-  const updateQuestionType = (id: number, newType: string) => {
+  const updateQuestionType = (id: string, newType: string) => {
     setQuestions(
       questions.map((q) => (q.id === id ? { ...q, type: newType } : q))
     );
+    setActiveQuestionId(id);
   };
 
   // Сохранение формы
@@ -115,6 +120,8 @@ export default function NewFormPage() {
 
           <QuestionList
             questions={questions}
+            activeQuestionId={activeQuestionId}
+            onSetActive={setActiveQuestionId}
             onRemoveQuestion={removeQuestion}
             onTextChange={updateQuestionText}
             onTypeChange={updateQuestionType}
