@@ -6,6 +6,7 @@ import {
   ActionIcon,
   Tooltip,
   useMantineColorScheme,
+  Box,
 } from '@mantine/core';
 import { Trash } from 'lucide-react';
 import { TextAnswer } from '../../Answers/TextAnswer/TextAnswer';
@@ -38,7 +39,7 @@ export default function QuestionItem({ id }: { id: string }) {
     <Card
       withBorder
       p="sm"
-      bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}
+      bg={colorScheme === 'dark' ? 'dark.4' : 'blue.0'}
       onClick={() => dispatch(setActiveQuestion(id))}
       style={{ position: 'relative' }}
     >
@@ -57,6 +58,7 @@ export default function QuestionItem({ id }: { id: string }) {
           <ActionIcon
             variant="outline"
             color="pink.7"
+            bg={colorScheme === 'dark' ? 'dark.1' : 'white'}
             aria-label="Remove item"
             onClick={() => dispatch(removeQuestion(id))}
             style={{ position: 'absolute', right: '0px', top: '0px' }}
@@ -68,11 +70,11 @@ export default function QuestionItem({ id }: { id: string }) {
 
       <QuestionTypeSelect id={id} />
 
-      <Stack mt="md">
+      <Box mt="md">
         {type === 'text' && <TextAnswer id={id} />}
         {type === 'radio' && <RadioAnswer id={id} />}
         {type === 'checkbox' && <CheckboxAnswer id={id} />}
-      </Stack>
+      </Box>
     </Card>
   );
 }

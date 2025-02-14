@@ -1,6 +1,8 @@
 :root {
   --color-danger-pink: #d6336c;
+  --color-text-gray: #d3d3d3;
 }
+
 a {
   text-decoration: none;
 }

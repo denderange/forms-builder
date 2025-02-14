@@ -9,11 +9,13 @@ import {
   Stack,
   Text,
   TextInput,
+  useMantineColorScheme,
 } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function QuestionPreview({ id }: { id: string }) {
   const dispatch = useDispatch();
+  const { colorScheme } = useMantineColorScheme();
   const question = useSelector((state: RootState) =>
     state.form.form.questions.find((q) => q.id === id)
   );
@@ -30,6 +32,7 @@ export default function QuestionPreview({ id }: { id: string }) {
       p="sm"
       style={{ cursor: 'pointer' }}
       onClick={() => dispatch(setActiveQuestion(id))}
+      bg={colorScheme === 'dark' ? 'dark.6' : 'gray.1'}
     >
       <Text>{questionTitle || 'Без названия'}</Text>
 

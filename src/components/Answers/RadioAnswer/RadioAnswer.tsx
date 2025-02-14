@@ -1,12 +1,13 @@
 import {
   Group,
-  RadioGroup,
-  Radio,
+  Text,
   TextInput,
   CloseButton,
   Stack,
+  useMantineColorScheme,
+  Box,
 } from '@mantine/core';
-import { X } from 'lucide-react';
+import { Circle, X } from 'lucide-react';
 import { ButtonAddOption } from '@/components/Buttons/ButtonAddOption/ButtonAddOption';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateQuestionOptions } from '@/store/slices/formSlice';
@@ -17,6 +18,7 @@ type Option = { id: string; text: string };
 
 export function RadioAnswer({ id }: { id: string }) {
   const dispatch = useDispatch();
+  const { colorScheme } = useMantineColorScheme();
 
   const options = useSelector(
     (state: RootState) =>
@@ -43,26 +45,24 @@ export function RadioAnswer({ id }: { id: string }) {
 
   return (
     <>
-      <RadioGroup>
-        <Stack>
+      <Stack gap={'0px'}>
+        <Box bg={colorScheme === 'dark' ? 'dark.4' : 'gray.0'} p="sm">
+          <Text ta="center">Варианты ответов</Text>
           {options.map((option) => (
-            <Group key={option.id} justify="space-between" my="sm">
-              <Group style={{ flex: '1' }}>
-                <Radio value={option.text} disabled />
+            <Group key={option.id} justify="space-between" my="5px">
+              <Group style={{ flex: '1' }} gap={'0px'}>
+                <Circle
+                  size={18}
+                  color={colorScheme === 'dark' ? '#616161' : '#b9b9b9'}
+                />
                 <TextInput
                   value={option.text}
                   onChange={(e) =>
                     handleUpdateOption(option.id, e.target.value)
                   }
                   placeholder="Введите вариант"
-                  variant="unstyled"
                   pl="sm"
-                  mt="-5px"
-                  bg="white"
                   flex="1"
-                  style={{
-                    borderBottom: '1px solid #a5a5a5',
-                  }}
                 />
               </Group>
               <CloseButton
@@ -72,8 +72,8 @@ export function RadioAnswer({ id }: { id: string }) {
               />
             </Group>
           ))}
-        </Stack>
-      </RadioGroup>
+        </Box>
+      </Stack>
       <ButtonAddOption onClick={handleAddOption} />
     </>
   );

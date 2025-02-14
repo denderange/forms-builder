@@ -14,7 +14,7 @@ export function FormMeta() {
     <Box
       p={'lg'}
       style={{ borderRadius: '10px' }}
-      bg={colorScheme === 'dark' ? 'gray.7' : 'cyan.0'}
+      bg={colorScheme === 'dark' ? 'gray.8' : 'gray.2'}
     >
       <TextInput
         label="Название"

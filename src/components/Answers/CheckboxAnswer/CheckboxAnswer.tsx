@@ -4,8 +4,12 @@ import {
   Checkbox,
   TextInput,
   CloseButton,
+  Stack,
+  Box,
+  Text,
+  useMantineColorScheme,
 } from '@mantine/core';
-import { X } from 'lucide-react';
+import { Square, X } from 'lucide-react';
 import { ButtonAddOption } from '@/components/Buttons/ButtonAddOption/ButtonAddOption';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateQuestionOptions } from '@/store/slices/formSlice';
@@ -14,14 +18,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 type Option = { id: string; text: string };
 
-type Props = {
-  id: string; // id вопроса
-};
-
-export function CheckboxAnswer({ id }: Props) {
+export function CheckboxAnswer({ id }: { id: string }) {
   const dispatch = useDispatch();
+  const { colorScheme } = useMantineColorScheme();
 
-  // Извлекаем опции из состояния
   const options = useSelector(
     (state: RootState) =>
       state.form.form.questions.find((q) => q.id === id)?.options || []
@@ -47,32 +47,35 @@ export function CheckboxAnswer({ id }: Props) {
 
   return (
     <>
-      <CheckboxGroup>
-        {options.map((option) => (
-          <Group key={option.id} justify="space-between" my="md">
-            <Group style={{ flex: '1' }}>
-              <Checkbox value={option.text} disabled />
-              <TextInput
-                value={option.text}
-                onChange={(e) => handleUpdateOption(option.id, e.target.value)}
-                placeholder="Введите вариант"
-                variant="unstyled"
-                style={{
-                  backgroundColor: 'white',
-                  borderBottom: '1px solid #a5a5a5',
-                  flex: '1',
-                  marginTop: '-5px',
-                }}
+      <Stack gap={'0px'}>
+        <Box bg={colorScheme === 'dark' ? 'dark.4' : 'gray.0'} p="sm">
+          <Text ta="center">Варианты ответов</Text>
+          {options.map((option) => (
+            <Group key={option.id} justify="space-between" my="5px">
+              <Group style={{ flex: '1' }} gap={'0px'}>
+                <Square
+                  size={20}
+                  color={colorScheme === 'dark' ? '#616161' : '#b9b9b9'}
+                />
+                <TextInput
+                  value={option.text}
+                  onChange={(e) =>
+                    handleUpdateOption(option.id, e.target.value)
+                  }
+                  placeholder="Введите вариант"
+                  pl="sm"
+                  flex="1"
+                />
+              </Group>
+              <CloseButton
+                icon={<X size={18} color="#d6336c" />}
+                onClick={() => handleRemoveOption(option.id)}
+                size="xs"
               />
             </Group>
-            <CloseButton
-              icon={<X size={18} color="#d6336c" />}
-              onClick={() => handleRemoveOption(option.id)}
-              size="xs"
-            />
-          </Group>
-        ))}
-      </CheckboxGroup>
+          ))}
+        </Box>
+      </Stack>
       <ButtonAddOption onClick={handleAddOption} />
     </>
   );

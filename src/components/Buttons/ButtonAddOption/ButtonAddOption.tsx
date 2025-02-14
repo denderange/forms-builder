@@ -10,8 +10,11 @@ export function ButtonAddOption({ onClick }: Props) {
     <Button
       size="xs"
       variant="light"
+      color="cyan"
       leftSection={<TicketPlus size={14} />}
       onClick={onClick}
+      fullWidth
+      mt="md"
     >
       Добавить вариант
     </Button>
