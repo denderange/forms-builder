@@ -5,110 +5,73 @@ import {
   Stack,
   ActionIcon,
   Tooltip,
+  useMantineColorScheme,
 } from '@mantine/core';
 import { Trash } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import { TextAnswer } from '../../Answers/TextAnswer/TextAnswer';
 import { RadioAnswer } from '../../Answers/RadioAnswer/RadioAnswer';
 import { CheckboxAnswer } from '../../Answers/CheckboxAnswer/CheckboxAnswer';
 import { QuestionTypeSelect } from '../QuestionTypeSelect/QuestionTypeSelect';
-import { useColorScheme } from '@mantine/hooks';
-import { v4 as uuidv4 } from 'uuid';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  updateQuestionTitle,
+  setActiveQuestion,
+  removeQuestion,
+} from '@/store/slices/formSlice';
+import { RootState } from '@/store/store';
 
-type Props = {
-  id: string;
-  text: string;
-  type: string;
-  options: { id: string; text: string }[];
-  onTextChange: (id: string, text: string) => void;
-  onTypeChange: (id: string, type: string) => void;
-  onRemove: (id: string) => void;
-  onOptionsChange: (
-    id: string,
-    options: { id: string; text: string }[]
-  ) => void;
-};
+export default function QuestionItem({ id }: { id: string }) {
+  const { colorScheme } = useMantineColorScheme();
+  const dispatch = useDispatch();
 
-export default function QuestionItem({
-  id,
-  text,
-  type,
-  options,
-  onTextChange,
-  onTypeChange,
-  onRemove,
-  onOptionsChange,
-}: Props) {
-  const colorScheme = useColorScheme();
+  const question = useSelector((state: RootState) =>
+    state.form.form.questions.find((q) => q.id === id)
+  );
 
-  // Добавить вариант ответа
-  const addOption = () => {
-    const newOptions = [...options, { id: uuidv4(), text: '' }];
-    onOptionsChange(id, newOptions);
-  };
+  if (!question) {
+    return null;
+  }
 
-  // Удалить вариант
-  const removeOption = (id: string) => {
-    const newOptions = options.filter((opt) => opt.id !== id);
-    onOptionsChange(id, newOptions);
-  };
-
-  // Обновить текст варианта ответа
-  const updateOption = (id: string, newText: string) => {
-    const newOptions = options.map((opt) =>
-      opt.id === id ? { ...opt, text: newText } : opt
-    );
-    onOptionsChange(id, newOptions);
-  };
+  const { questionTitle, type } = question;
 
   return (
-    <Card withBorder p="sm" bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}>
+    <Card
+      withBorder
+      p="sm"
+      bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}
+      onClick={() => dispatch(setActiveQuestion(id))}
+      style={{ position: 'relative' }}
+    >
       <Group justify="space-between">
         <TextInput
-          description="Question"
+          label="Question"
           placeholder="Вопрос"
-          value={text}
-          onChange={(e) => onTextChange(id, e.target.value)}
+          value={questionTitle}
+          onChange={(e) =>
+            dispatch(updateQuestionTitle({ id, text: e.target.value }))
+          }
           flex={1}
+          maw="95%"
         />
-        <Tooltip label="Delete this section" color="pink">
+        <Tooltip label="Удалить вопрос" color="pink">
           <ActionIcon
             variant="outline"
             color="pink.7"
             aria-label="Remove item"
-            onClick={() => onRemove(id)}
-            mt={'-45px'}
-            mr={'-8px'}
+            onClick={() => dispatch(removeQuestion(id))}
+            style={{ position: 'absolute', right: '0px', top: '0px' }}
           >
             <Trash size={16} />
           </ActionIcon>
         </Tooltip>
       </Group>
 
-      <QuestionTypeSelect
-        value={type}
-        onChange={(newType) => onTypeChange(id, newType)}
-      />
+      <QuestionTypeSelect id={id} />
 
-      {/* Динамическое отображение полей */}
       <Stack mt="md">
-        {type === 'text' && <TextAnswer />}
-        {type === 'radio' && (
-          <RadioAnswer
-            options={options}
-            addOption={addOption}
-            updateOption={updateOption}
-            removeOption={removeOption}
-          />
-        )}
-        {type === 'checkbox' && (
-          <CheckboxAnswer
-            options={options}
-            addOption={addOption}
-            updateOption={updateOption}
-            removeOption={removeOption}
-          />
-        )}
+        {type === 'text' && <TextAnswer id={id} />}
+        {type === 'radio' && <RadioAnswer id={id} />}
+        {type === 'checkbox' && <CheckboxAnswer id={id} />}
       </Stack>
     </Card>
   );

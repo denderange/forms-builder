@@ -22,7 +22,6 @@ export default function Home() {
 
   return (
     <>
-      <div>v-prod-#17</div>
       <Header />
       <Templates />
       <PopularTemplates />

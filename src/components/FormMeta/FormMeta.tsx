@@ -1,20 +1,14 @@
-import { Box, TextInput, Textarea } from '@mantine/core';
-import { useColorScheme } from '@mantine/hooks';
+import { Box, TextInput, Textarea, useMantineColorScheme } from '@mantine/core';
+import { setFormTitle, setFormDescription } from '@/store/slices/formSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
-type Props = {
-  title: string;
-  description: string;
-  setTitle: (value: string) => void;
-  setDescription: (value: string) => void;
-};
-
-export function FormMeta({
-  title,
-  description,
-  setTitle,
-  setDescription,
-}: Props) {
-  const colorScheme = useColorScheme();
+export function FormMeta() {
+  const { colorScheme } = useMantineColorScheme();
+  const dispatch = useDispatch();
+  const { formTitle, formDescription } = useSelector(
+    (state: RootState) => state.form.form
+  );
 
   return (
     <Box
@@ -25,16 +19,16 @@ export function FormMeta({
       <TextInput
         label="Название"
         placeholder="Введите название формы"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={formTitle}
+        onChange={(e) => dispatch(setFormTitle(e.target.value))}
         required
       />
 
       <Textarea
         label="Описание"
         placeholder="Введите описание (необязательно)"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        value={formDescription}
+        onChange={(e) => dispatch(setFormDescription(e.target.value))}
       />
     </Box>
   );

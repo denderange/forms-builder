@@ -1,59 +1,25 @@
 import { Stack } from '@mantine/core';
 import QuestionItem from '../QuestionItem/QuestionItem';
 import QuestionPreview from '../QuestionPreview/QuestionPreview';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/store/store';
 
-type Question = {
-  id: string;
-  text: string;
-  type: string;
-  options?: { id: string; text: string }[];
-};
+export default function QuestionList() {
+  const dispatch = useDispatch();
+  const questions = useSelector(
+    (state: RootState) => state.form.form.questions
+  );
+  const activeQuestionId = useSelector(
+    (state: RootState) => state.form.activeQuestionId
+  );
 
-type Props = {
-  questions: Question[];
-  activeQuestionId: string | null;
-  onSetActive: (id: string) => void;
-  onRemoveQuestion: (id: string) => void;
-  onTextChange: (id: string, text: string) => void;
-  onTypeChange: (id: string, type: string) => void;
-  onOptionsChange: (
-    id: string,
-    options: { id: string; text: string }[]
-  ) => void;
-};
-
-export default function QuestionList({
-  questions,
-  activeQuestionId,
-  onSetActive,
-  onRemoveQuestion,
-  onTextChange,
-  onTypeChange,
-  onOptionsChange,
-}: Props) {
   return (
     <Stack>
-      {questions.map((q) =>
-        q.id === activeQuestionId ? (
-          <QuestionItem
-            key={q.id}
-            id={q.id}
-            text={q.text}
-            type={q.type}
-            onTextChange={onTextChange}
-            onTypeChange={onTypeChange}
-            onRemove={onRemoveQuestion}
-            options={q.options || []}
-            onOptionsChange={onOptionsChange}
-          />
+      {questions.map((question) =>
+        question.id === activeQuestionId ? (
+          <QuestionItem key={question.id} id={question.id} />
         ) : (
-          <QuestionPreview
-            key={q.id}
-            id={q.id}
-            text={q.text}
-            type={q.type}
-            onSetActive={onSetActive}
-          />
+          <QuestionPreview key={question.id} id={question.id} />
         )
       )}
     </Stack>

@@ -15,6 +15,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { ClerkProvider } from '@clerk/nextjs';
 import Footer from '@/components/Footer/Footer';
+import StoreProvider from '@/providers/StoreProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -51,24 +52,26 @@ export default async function RootLayout({
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider>
-              <Container
-                size={'xl'}
-                style={{
-                  minHeight: '100vh',
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                <Flex
-                  direction={'column'}
-                  style={{ flexGrow: '1' }}
-                  component={'main'}
-                  pb={'xl'}
+              <StoreProvider>
+                <Container
+                  size={'xl'}
+                  style={{
+                    minHeight: '100vh',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
                 >
-                  {children}
-                </Flex>
-                <Footer />
-              </Container>
+                  <Flex
+                    direction={'column'}
+                    style={{ flexGrow: '1' }}
+                    component={'main'}
+                    pb={'xl'}
+                  >
+                    {children}
+                  </Flex>
+                  <Footer />
+                </Container>
+              </StoreProvider>
             </ThemeProvider>
           </NextIntlClientProvider>
         </body>

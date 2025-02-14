@@ -1,45 +1,67 @@
-import { Card, Stack, Text } from '@mantine/core';
+import { setActiveQuestion } from '@/store/slices/formSlice';
+import { RootState } from '@/store/store';
+import {
+  Card,
+  Checkbox,
+  CheckboxGroup,
+  Radio,
+  RadioGroup,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { useDispatch, useSelector } from 'react-redux';
 
-type Props = {
-  id: string;
-  text: string;
-  type: string;
-  options?: { id: string; text: string }[];
-  onSetActive: (id: string) => void;
-};
+export default function QuestionPreview({ id }: { id: string }) {
+  const dispatch = useDispatch();
+  const question = useSelector((state: RootState) =>
+    state.form.form.questions.find((q) => q.id === id)
+  );
 
-export default function QuestionPreview({
-  id,
-  text,
-  type,
-  options = [],
-  onSetActive,
-}: Props) {
+  if (!question) {
+    return null;
+  }
+
+  const { questionTitle, type, options } = question;
+
   return (
     <Card
       withBorder
       p="sm"
       style={{ cursor: 'pointer' }}
-      onClick={() => onSetActive(id)}
+      onClick={() => dispatch(setActiveQuestion(id))}
     >
-      <Text>{text || 'Без названия'}</Text>
-      <Text size="sm" c="gray">
-        {type === 'text'
-          ? 'Текстовый ответ'
-          : type === 'radio'
-          ? 'Один вариант'
-          : 'Несколько вариантов'}
-      </Text>
+      <Text>{questionTitle || 'Без названия'}</Text>
 
-      {options.length > 0 && (
-        <Stack mt="sm">
-          {options.map((opt) => (
-            <Text key={opt.id} size="sm">
-              - {opt.text || 'Без текста'}
-            </Text>
-          ))}
-        </Stack>
+      {type === 'radio' && (
+        <RadioGroup>
+          <Stack gap="md" mt="md">
+            {options.map((opt) => (
+              <Radio
+                key={opt.id}
+                value={opt.text}
+                label={opt.text || 'Без текста'}
+              />
+            ))}
+          </Stack>
+        </RadioGroup>
       )}
+
+      {type === 'checkbox' && (
+        <CheckboxGroup>
+          <Stack gap="md" mt="md">
+            {options.map((opt) => (
+              <Checkbox
+                key={opt.id}
+                value={opt.text}
+                label={opt.text || 'Без текста'}
+              />
+            ))}
+          </Stack>
+        </CheckboxGroup>
+      )}
+
+      {type === 'text' && <TextInput placeholder="Введите ваш ответ" mt="md" />}
     </Card>
   );
 }
