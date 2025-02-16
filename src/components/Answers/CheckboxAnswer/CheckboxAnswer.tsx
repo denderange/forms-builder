@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 type Option = { id: string; text: string };
 
-export function CheckboxAnswer({ id }: { id: string }) {
+export const CheckboxAnswer = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
 
@@ -48,7 +48,7 @@ export function CheckboxAnswer({ id }: { id: string }) {
   return (
     <>
       <Stack gap={'0px'}>
-        <Box bg={colorScheme === 'dark' ? 'dark.4' : 'gray.0'} p="sm">
+        <Box bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'} p="sm">
           <Text ta="center">Варианты ответов</Text>
           {options.map((option) => (
             <Group key={option.id} justify="space-between" my="5px">
@@ -79,4 +79,4 @@ export function CheckboxAnswer({ id }: { id: string }) {
       <ButtonAddOption onClick={handleAddOption} />
     </>
   );
-}
+};

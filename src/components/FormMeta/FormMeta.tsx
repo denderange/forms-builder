@@ -3,7 +3,7 @@ import { setFormTitle, setFormDescription } from '@/store/slices/formSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
-export function FormMeta() {
+export const FormMeta = () => {
   const { colorScheme } = useMantineColorScheme();
   const dispatch = useDispatch();
   const { formTitle, formDescription } = useSelector(
@@ -32,4 +32,4 @@ export function FormMeta() {
       />
     </Box>
   );
-}
+};

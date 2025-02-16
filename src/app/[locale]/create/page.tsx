@@ -32,18 +32,29 @@ export default async function CreateTemplatePage() {
 
   return (
     <>
-      <div>v#2</div>
       <Title order={2}>Создать форму</Title>
       <Stack gap="md">
-        <Box maw={200}>
+        <Box maw={200} mt="md">
           <Card withBorder shadow="sm">
             <CardSection>
               <Flex justify="center">
-                <ClipboardPlus size={160} color="#007694" />
+                <ClipboardPlus
+                  strokeWidth={0.5}
+                  size={160}
+                  color="#007694"
+                  opacity={0.5}
+                />
               </Flex>
             </CardSection>
             <Link href="/create/new">
-              <Button fullWidth>Создать новую форму</Button>
+              <Button
+                fullWidth
+                size="compact-md"
+                variant="gradient"
+                gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
+              >
+                Пустая форма
+              </Button>
             </Link>
           </Card>
         </Box>

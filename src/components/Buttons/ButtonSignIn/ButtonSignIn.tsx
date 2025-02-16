@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@mantine/core';
 import { UserRoundPen } from 'lucide-react';
 import React from 'react';

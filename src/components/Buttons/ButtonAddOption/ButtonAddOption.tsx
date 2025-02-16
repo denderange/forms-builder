@@ -5,7 +5,7 @@ type Props = {
   onClick: () => void;
 };
 
-export function ButtonAddOption({ onClick }: Props) {
+export const ButtonAddOption = ({ onClick }: Props) => {
   return (
     <Button
       size="xs"
@@ -14,9 +14,9 @@ export function ButtonAddOption({ onClick }: Props) {
       leftSection={<TicketPlus size={14} />}
       onClick={onClick}
       fullWidth
-      mt="md"
+      mt="lg"
     >
       Добавить вариант
     </Button>
   );
-}
+};

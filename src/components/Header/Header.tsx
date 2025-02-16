@@ -6,7 +6,7 @@ import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { SquarePen } from 'lucide-react';
 import Logo from '../Logo/Logo';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
-import { Link, usePathname } from '@/i18n/routing';
+import { Link } from '@/i18n/routing';
 import ClerkButtons from '../Buttons/ClerkButtons/ClerkButtons';
 
 const Header = () => {
@@ -22,8 +22,8 @@ const Header = () => {
     >
       <Logo />
       {/* <Title variant="h5">{t('title')}</Title> */}
-      <TextInput placeholder="Поиск..." style={{ flexGrow: '1' }} />
-      <Group gap={'md'}>
+      <TextInput placeholder="Поиск..." flex={1} />
+      <Group gap={'md'} style={{ margin: '0px auto' }}>
         <Link href={'/create'}>
           <Button
             variant="gradient"

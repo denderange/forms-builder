@@ -11,6 +11,7 @@ interface Question {
   questionTitle: string;
   type: string;
   options: Option[];
+  imageUrl?: string;
 }
 
 interface FormState {
@@ -53,6 +54,7 @@ const formSlice = createSlice({
         questionTitle: '',
         type: '',
         options: [],
+        imageUrl: undefined,
       };
       state.form.questions.push(newQuestion);
       state.activeQuestionId = newQuestion.id;
@@ -92,9 +94,22 @@ const formSlice = createSlice({
       );
       if (question) question.options = action.payload.options;
     },
+    updateQuestionImage: (
+      state,
+      action: PayloadAction<{ id: string; imageUrl: string }>
+    ) => {
+      const question = state.form.questions.find(
+        (q) => q.id === action.payload.id
+      );
+      if (question) question.imageUrl = action.payload.imageUrl;
+    },
     setActiveQuestion: (state, action: PayloadAction<string | null>) => {
       state.activeQuestionId = action.payload;
     },
+    updateQuestionOrder: (state, action: PayloadAction<Question[]>) => {
+      state.form.questions = action.payload;
+    },
+
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
@@ -110,6 +125,8 @@ export const {
   updateQuestionType,
   updateQuestionOptions,
   setActiveQuestion,
+  updateQuestionOrder,
+  updateQuestionImage,
   setLoading,
 } = formSlice.actions;
 

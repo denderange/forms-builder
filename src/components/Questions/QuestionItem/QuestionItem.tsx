@@ -7,8 +7,9 @@ import {
   Tooltip,
   useMantineColorScheme,
   Box,
+  Switch,
 } from '@mantine/core';
-import { Trash } from 'lucide-react';
+import { ImagePlus, Trash } from 'lucide-react';
 import { TextAnswer } from '../../Answers/TextAnswer/TextAnswer';
 import { RadioAnswer } from '../../Answers/RadioAnswer/RadioAnswer';
 import { CheckboxAnswer } from '../../Answers/CheckboxAnswer/CheckboxAnswer';
@@ -20,8 +21,9 @@ import {
   removeQuestion,
 } from '@/store/slices/formSlice';
 import { RootState } from '@/store/store';
+import { UploadQuestionImage } from '@/components/UploadQuestionImage/UploadQuestionImage';
 
-export default function QuestionItem({ id }: { id: string }) {
+export const QuestionItem = ({ id }: { id: string }) => {
   const { colorScheme } = useMantineColorScheme();
   const dispatch = useDispatch();
 
@@ -41,9 +43,47 @@ export default function QuestionItem({ id }: { id: string }) {
       p="sm"
       bg={colorScheme === 'dark' ? 'dark.4' : 'blue.0'}
       onClick={() => dispatch(setActiveQuestion(id))}
-      style={{ position: 'relative' }}
     >
-      <Group justify="space-between">
+      <Group
+        bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}
+        p="xs"
+        justify="space-between"
+      >
+        <Group gap="lg" bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}>
+          {/* <Tooltip
+            label="Вставить изображение"
+          >
+            <ActionIcon
+              variant="outline"
+              bg={colorScheme === 'dark' ? 'dark.6' : 'white'}
+              aria-label="Add image"
+              // onClick={() => dispatch(removeQuestion(id))}
+            >
+              <ImagePlus size={16} />
+            </ActionIcon>
+          </Tooltip> */}
+          <UploadQuestionImage />
+          <Switch defaultChecked label="Обязательный вопрос" ml={'auto'} />
+        </Group>
+        <Tooltip label="Удалить вопрос" color="pink">
+          <ActionIcon
+            variant="outline"
+            color="pink.7"
+            bg={colorScheme === 'dark' ? 'dark.1' : 'white'}
+            aria-label="Remove item"
+            onClick={() => dispatch(removeQuestion(id))}
+          >
+            <Trash size={16} />
+          </ActionIcon>
+        </Tooltip>
+      </Group>
+
+      <Stack
+        justify="space-between"
+        mt="md"
+        p="sm"
+        bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}
+      >
         <TextInput
           label="Question"
           placeholder="Вопрос"
@@ -52,23 +92,9 @@ export default function QuestionItem({ id }: { id: string }) {
             dispatch(updateQuestionTitle({ id, text: e.target.value }))
           }
           flex={1}
-          maw="95%"
         />
-        <Tooltip label="Удалить вопрос" color="pink">
-          <ActionIcon
-            variant="outline"
-            color="pink.7"
-            bg={colorScheme === 'dark' ? 'dark.1' : 'white'}
-            aria-label="Remove item"
-            onClick={() => dispatch(removeQuestion(id))}
-            style={{ position: 'absolute', right: '0px', top: '0px' }}
-          >
-            <Trash size={16} />
-          </ActionIcon>
-        </Tooltip>
-      </Group>
-
-      <QuestionTypeSelect id={id} />
+        <QuestionTypeSelect id={id} />
+      </Stack>
 
       <Box mt="md">
         {type === 'text' && <TextAnswer id={id} />}
@@ -77,4 +103,4 @@ export default function QuestionItem({ id }: { id: string }) {
       </Box>
     </Card>
   );
-}
+};

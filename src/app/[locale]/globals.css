@@ -13,5 +13,25 @@ a {
 
 .logo:visited {
   color: var(--mantine-color-cyan-8);
-  /* color: #6b6b6b */
+}
+
+.btnSignIn {
+  cursor: pointer;
+  padding: 7px 10px;
+  /* border: 1px solid #cfcfcf; */
+  border: 0px;
+  background-color: #1c7ed6;
+  color: #f3f3f3;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  outline: none;
+}
+
+.btnSignIn:hover {
+  background-color: #339af0;
 }

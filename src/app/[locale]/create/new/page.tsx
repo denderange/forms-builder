@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { Button, Container, Title, Stack, Box, Group } from '@mantine/core';
-import QuestionList from '@/components/Questions/QuestionList/QuestionList';
+import { QuestionList } from '@/components/Questions/QuestionList/QuestionList';
 import { HardDriveDownload, Plus } from 'lucide-react';
 import { FormMeta } from '@/components/FormMeta/FormMeta';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,9 +14,7 @@ export default function NewFormPage() {
   const { questions } = useSelector((state: RootState) => state.form.form);
   const loading = useSelector((state: RootState) => state.form.loading);
 
-  useEffect(() => {
-    if (!questions.length) dispatch(addQuestion());
-  }, [questions.length, dispatch]);
+  if (!questions.length) dispatch(addQuestion());
 
   return (
     <Box>
