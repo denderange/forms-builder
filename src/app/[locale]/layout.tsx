@@ -1,13 +1,5 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import '@mantine/core/styles.css';
-import {
-  ColorSchemeScript,
-  Container,
-  Flex,
-  mantineHtmlProps,
-} from '@mantine/core';
-import './globals.css';
+import { Container, Flex, mantineHtmlProps } from '@mantine/core';
 import ThemeProvider from '@/providers/ThemeProvider';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
@@ -16,16 +8,8 @@ import { routing } from '@/i18n/routing';
 import { ClerkProvider } from '@clerk/nextjs';
 import Footer from '@/components/Footer/Footer';
 import StoreProvider from '@/providers/StoreProvider';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+import '@mantine/core/styles.css';
+import './globals.css';
 
 export const metadata: Metadata = {
   title: 'DD Forms',
@@ -48,8 +32,15 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang={locale} {...mantineHtmlProps}>
-        <head>{/* <ColorSchemeScript /> */}</head>
-        <body className={`${geistSans.variable} ${geistMono.variable}`}>
+        <head>
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+            rel="stylesheet"
+          />
+        </head>
+        <body>
           <NextIntlClientProvider messages={messages}>
             <ThemeProvider>
               <StoreProvider>
@@ -63,7 +54,7 @@ export default async function RootLayout({
                 >
                   <Flex
                     direction={'column'}
-                    style={{ flexGrow: '1' }}
+                    flex={1}
                     component={'main'}
                     pb={'xl'}
                   >

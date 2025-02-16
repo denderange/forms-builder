@@ -10,7 +10,7 @@ export const ButtonAddOption = ({ onClick }: Props) => {
     <Button
       size="xs"
       variant="light"
-      color="cyan"
+      color="cyan.9"
       leftSection={<TicketPlus size={14} />}
       onClick={onClick}
       fullWidth

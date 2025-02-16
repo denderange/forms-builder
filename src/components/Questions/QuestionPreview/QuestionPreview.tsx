@@ -5,25 +5,25 @@ import {
   Card,
   Checkbox,
   CheckboxGroup,
+  Group,
   Radio,
   RadioGroup,
   Stack,
   Text,
   TextInput,
   useMantineColorScheme,
+  Image,
+  Textarea,
 } from '@mantine/core';
-import { GripHorizontal } from 'lucide-react';
+import { Asterisk, GripHorizontal } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 
-interface QuestionPreviewProps {
+interface Props {
   id: string;
   dragHandleProps?: any;
 }
 
-export const QuestionPreview = ({
-  id,
-  dragHandleProps,
-}: QuestionPreviewProps) => {
+export const QuestionPreview = ({ id, dragHandleProps }: Props) => {
   const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
   const question = useSelector((state: RootState) =>
@@ -34,7 +34,7 @@ export const QuestionPreview = ({
     return null;
   }
 
-  const { questionTitle, type, options } = question;
+  const { questionTitle, type, options, isRequired, imageUrl } = question;
 
   return (
     <Card
@@ -60,7 +60,22 @@ export const QuestionPreview = ({
       >
         <GripHorizontal style={{ display: 'block' }} />
       </Box>
-      <Text mt="sm">{questionTitle || 'Без названия'}</Text>
+      <Group gap={0}>
+        <Text size="md" mt="xs" fw={500}>
+          {questionTitle || 'Без названия'}
+        </Text>
+        {isRequired && <Asterisk strokeWidth={3} size={16} color="#e64980" />}
+      </Group>
+
+      {imageUrl && (
+        <Image
+          src={imageUrl}
+          alt="uploaded image"
+          height={160}
+          mt="md"
+          style={{ border: '1px solid #ced4da' }}
+        />
+      )}
 
       {type === 'radio' && (
         <RadioGroup>
@@ -90,7 +105,7 @@ export const QuestionPreview = ({
         </CheckboxGroup>
       )}
 
-      {type === 'text' && <TextInput placeholder="Введите ваш ответ" mt="md" />}
+      {type === 'text' && <Textarea placeholder="Введите ваш ответ" mt="md" />}
     </Card>
   );
 };

@@ -1,5 +1,5 @@
-import { TextInput } from '@mantine/core';
+import { Textarea } from '@mantine/core';
 
 export const TextAnswer = ({ id }: { id: string }) => {
-  return <TextInput placeholder="Здесь будет ответ пользователя" disabled />;
+  return <Textarea placeholder="Здесь будет ответ пользователя" disabled />;
 };

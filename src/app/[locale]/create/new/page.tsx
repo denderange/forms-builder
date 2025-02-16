@@ -1,7 +1,15 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Button, Container, Title, Stack, Box, Group } from '@mantine/core';
+import {
+  Button,
+  Container,
+  Title,
+  Stack,
+  Box,
+  Group,
+  Tooltip,
+} from '@mantine/core';
 import { QuestionList } from '@/components/Questions/QuestionList/QuestionList';
 import { HardDriveDownload, Plus } from 'lucide-react';
 import { FormMeta } from '@/components/FormMeta/FormMeta';
@@ -24,7 +32,9 @@ export default function NewFormPage() {
       <Container size={'sm'} mt={'lg'}>
         <Stack gap="md">
           <FormMeta />
-          <Title order={4}>Вопросы</Title>
+          <Title order={3} c={'dimmed'}>
+            Вопросы
+          </Title>
 
           <QuestionList />
 
@@ -38,13 +48,16 @@ export default function NewFormPage() {
             >
               Добавить вопрос
             </Button>
-            <Button
-              loading={loading}
-              size="md"
-              leftSection={<HardDriveDownload size={16} />}
-            >
-              Сохранить форму
-            </Button>
+            <Tooltip label="Заполните название формы" color="gray">
+              <Button
+                loading={loading}
+                size="md"
+                disabled
+                leftSection={<HardDriveDownload size={16} />}
+              >
+                Сохранить форму
+              </Button>
+            </Tooltip>
           </Group>
         </Stack>
       </Container>

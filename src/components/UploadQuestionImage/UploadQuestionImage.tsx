@@ -1,37 +1,64 @@
 import { uploadImage } from '@/lib/uploadImage';
-import { ActionIcon, Tooltip, useMantineColorScheme } from '@mantine/core';
+import { updateQuestionImage } from '@/store/slices/formSlice';
+import {
+  ActionIcon,
+  Box,
+  Loader,
+  Tooltip,
+  useMantineColorScheme,
+} from '@mantine/core';
 import { ImagePlus } from 'lucide-react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-export const UploadQuestionImage = () => {
+export const UploadQuestionImage = ({ questionId }: { questionId: string }) => {
   const { colorScheme } = useMantineColorScheme();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    const url = await uploadImage(file);
-    if (url) {
-      setImageUrl(url);
-      console.log('Uploaded image URL:', url);
+    setIsLoading(true);
+    try {
+      const imageUrl = await uploadImage(file);
+      if (imageUrl) {
+        dispatch(updateQuestionImage({ id: questionId, imageUrl }));
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const handleClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
-    <div>
-      <input type="file" onChange={handleUpload} accept="image/*" />
-      {imageUrl && <img src={imageUrl} alt="Uploaded" style={{ width: 200 }} />}
-    </div>
-    // <Tooltip label="Вставить изображение">
-    //   <ActionIcon
-    //     variant="outline"
-    //     bg={colorScheme === 'dark' ? 'dark.6' : 'white'}
-    //     aria-label="Add image"
-    //     // onClick={() => dispatch(removeQuestion(id))}
-    //   >
-    //     <ImagePlus size={16} />
-    //   </ActionIcon>
-    // </Tooltip>
+    <Box>
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleUpload}
+        accept="image/*"
+        style={{ display: 'none' }}
+      />
+      {isLoading ? (
+        <Loader color="gray" size="xs" type="bars" />
+      ) : (
+        <Tooltip label="Вставить изображение">
+          <ActionIcon
+            variant="outline"
+            bg={colorScheme === 'dark' ? 'dark.6' : 'white'}
+            aria-label="Add image"
+            onClick={handleClick}
+          >
+            <ImagePlus size={16} />
+          </ActionIcon>
+        </Tooltip>
+      )}
+    </Box>
   );
 };

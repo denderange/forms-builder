@@ -1,7 +1,12 @@
 'use client';
 
-import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { ColorSchemeScript, createTheme, MantineProvider } from '@mantine/core';
 import { ReactNode } from 'react';
+
+const theme = createTheme({
+  fontFamily: 'Roboto, sans-serif',
+  fontFamilyMonospace: 'Monaco, Courier, monospace',
+});
 
 export default function ThemeProvider({ children }: { children: ReactNode }) {
   return (
@@ -10,7 +15,9 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
         nonce="8IBTHwOdqNKAWeKl7plt8g=="
         defaultColorScheme="light"
       />
-      <MantineProvider defaultColorScheme="light">{children}</MantineProvider>
+      <MantineProvider defaultColorScheme="light" theme={theme}>
+        {children}
+      </MantineProvider>
     </>
   );
 }

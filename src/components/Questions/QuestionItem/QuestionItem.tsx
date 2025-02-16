@@ -8,8 +8,10 @@ import {
   useMantineColorScheme,
   Box,
   Switch,
+  CardSection,
+  Image,
 } from '@mantine/core';
-import { ImagePlus, Trash } from 'lucide-react';
+import { ImageOff, Trash } from 'lucide-react';
 import { TextAnswer } from '../../Answers/TextAnswer/TextAnswer';
 import { RadioAnswer } from '../../Answers/RadioAnswer/RadioAnswer';
 import { CheckboxAnswer } from '../../Answers/CheckboxAnswer/CheckboxAnswer';
@@ -19,6 +21,8 @@ import {
   updateQuestionTitle,
   setActiveQuestion,
   removeQuestion,
+  removeQuestionImage,
+  toggleQuestionRequired,
 } from '@/store/slices/formSlice';
 import { RootState } from '@/store/store';
 import { UploadQuestionImage } from '@/components/UploadQuestionImage/UploadQuestionImage';
@@ -35,13 +39,17 @@ export const QuestionItem = ({ id }: { id: string }) => {
     return null;
   }
 
-  const { questionTitle, type } = question;
+  const { questionTitle, type, imageUrl } = question;
+
+  const handleRemoveImage = () => {
+    dispatch(removeQuestionImage({ id }));
+  };
 
   return (
     <Card
       withBorder
       p="sm"
-      bg={colorScheme === 'dark' ? 'dark.4' : 'blue.0'}
+      bg={colorScheme === 'dark' ? 'dark.4' : 'blue.1'}
       onClick={() => dispatch(setActiveQuestion(id))}
     >
       <Group
@@ -50,20 +58,14 @@ export const QuestionItem = ({ id }: { id: string }) => {
         justify="space-between"
       >
         <Group gap="lg" bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}>
-          {/* <Tooltip
-            label="Вставить изображение"
-          >
-            <ActionIcon
-              variant="outline"
-              bg={colorScheme === 'dark' ? 'dark.6' : 'white'}
-              aria-label="Add image"
-              // onClick={() => dispatch(removeQuestion(id))}
-            >
-              <ImagePlus size={16} />
-            </ActionIcon>
-          </Tooltip> */}
-          <UploadQuestionImage />
-          <Switch defaultChecked label="Обязательный вопрос" ml={'auto'} />
+          <UploadQuestionImage questionId={id} />
+          <Switch
+            label="Обязательный вопрос"
+            checked={question.isRequired}
+            onChange={() => dispatch(toggleQuestionRequired({ id }))}
+            ml={'auto'}
+            color="cyan"
+          />
         </Group>
         <Tooltip label="Удалить вопрос" color="pink">
           <ActionIcon
@@ -77,6 +79,30 @@ export const QuestionItem = ({ id }: { id: string }) => {
           </ActionIcon>
         </Tooltip>
       </Group>
+
+      {imageUrl && (
+        <CardSection px="md" mt="md" style={{ position: 'relative' }}>
+          <Image
+            src={imageUrl}
+            alt="uploaded image"
+            height={160}
+            style={{ border: '1px solid #ced4da' }}
+          />
+          <Tooltip label="Удалить изображение" color="pink">
+            <ActionIcon
+              variant="outline"
+              bg={colorScheme === 'dark' ? 'dark.0' : 'white'}
+              color="pink.7"
+              aria-label="Remove image"
+              size={'sm'}
+              onClick={handleRemoveImage}
+              style={{ position: 'absolute', top: '4px', right: '20px' }}
+            >
+              <ImageOff size={14} />
+            </ActionIcon>
+          </Tooltip>
+        </CardSection>
+      )}
 
       <Stack
         justify="space-between"
