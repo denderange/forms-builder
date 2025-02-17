@@ -23,7 +23,7 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { userId } = await req.json();
+    const { userId, name, email } = await req.json();
 
     if (!userId) {
       return NextResponse.json(
@@ -37,8 +37,23 @@ export async function POST(req: Request) {
     });
 
     if (!existingUser) {
-      await db.user.create({ data: { clerkId: userId } });
+      await db.user.create({ 
+        data: { 
+          clerkId: userId, 
+          name: name || null,
+          email: email || null, 
+        } 
+      });
       console.log(`User with ID ${userId} has been saved in the database`);
+    }else {
+      await db.user.update({
+        where: { clerkId: userId },
+        data: {
+          name: name || existingUser.name,
+          email: email || existingUser.email,
+        },
+      });
+      console.log(`User with ID ${userId} has been updated`);
     }
 
     return NextResponse.json({ success: true });

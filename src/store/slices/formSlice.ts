@@ -20,6 +20,8 @@ interface FormState {
   formTitle: string;
   formDescription: string;
   questions: Question[];
+  accessType: 'public' | 'restricted';
+  allowedUsers: string[];
 }
 
 interface FormSliceState {
@@ -34,6 +36,8 @@ const initialState: FormSliceState = {
     formTitle: '',
     formDescription: '',
     questions: [],
+    accessType: 'public',
+    allowedUsers: [],
   },
   activeQuestionId: null,
   loading: false,
@@ -48,6 +52,15 @@ const formSlice = createSlice({
     },
     setFormDescription: (state, action: PayloadAction<string>) => {
       state.form.formDescription = action.payload;
+    },
+    setAccessType: (state, action: PayloadAction<'public' | 'restricted'>) => {
+      state.form.accessType = action.payload;
+      if (action.payload === 'public') {
+        state.form.allowedUsers = [];
+      }
+    },
+    setAllowedUsers: (state, action: PayloadAction<string[]>) => {
+      state.form.allowedUsers = action.payload;
     },
     addQuestion: (state) => {
       const newQuestion: Question = {
@@ -137,6 +150,8 @@ const formSlice = createSlice({
 export const {
   setFormTitle,
   setFormDescription,
+  setAccessType,
+  setAllowedUsers,
   addQuestion,
   removeQuestion,
   updateQuestionTitle,

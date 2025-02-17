@@ -19,7 +19,9 @@ import { RootState } from '@/store/store';
 
 export default function NewFormPage() {
   const dispatch = useDispatch();
-  const { questions } = useSelector((state: RootState) => state.form.form);
+  const { questions, formTitle } = useSelector(
+    (state: RootState) => state.form.form
+  );
   const loading = useSelector((state: RootState) => state.form.loading);
 
   if (!questions.length) dispatch(addQuestion());
@@ -48,11 +50,18 @@ export default function NewFormPage() {
             >
               Добавить вопрос
             </Button>
-            <Tooltip label="Заполните название формы" color="gray">
+            <Tooltip
+              label={
+                formTitle.length
+                  ? 'Сохранить и опубликовать'
+                  : 'Заполните название формы'
+              }
+              color={!formTitle.length ? 'gray' : ''}
+            >
               <Button
                 loading={loading}
                 size="md"
-                disabled
+                disabled={!formTitle.length}
                 leftSection={<HardDriveDownload size={16} />}
               >
                 Сохранить форму
