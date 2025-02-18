@@ -1,13 +1,19 @@
 'use client';
 import {
+  ActionIcon,
   Autocomplete,
+  Badge,
+  Box,
   Group,
+  Loader,
   Select,
   Stack,
   Text,
   useMantineColorScheme,
 } from '@mantine/core';
+import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 interface Props {
   accessType: 'public' | 'restricted';
@@ -25,34 +31,45 @@ export const AccessSettings = ({
   const { colorScheme } = useMantineColorScheme();
   const [userSearch, setUserSearch] = useState('');
   const [users, setUsers] = useState<any[]>([]);
+  const [debouncedSearch] = useDebounce(userSearch, 300);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleUserSelect = (value: string) => {
     const selectedUser = users.find((user) => user.email === value);
     if (selectedUser && !allowedUsers.includes(selectedUser.email)) {
       setAllowedUsers([...allowedUsers, selectedUser.email]);
     }
-    setUserSearch('');
+    setTimeout(() => setUserSearch(''), 0);
+  };
+
+  const handleRemoveUser = (email: string) => {
+    setAllowedUsers(allowedUsers.filter((user) => user !== email));
   };
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if (userSearch) {
-        const response = await fetch(`/api/users/search?q=${userSearch}`);
+      if (!debouncedSearch) {
+        setUsers([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/users/search?q=${debouncedSearch}`);
         const data = await response.json();
         setUsers(data);
+      } catch (error) {
+        console.error('Ошибка при загрузке пользователей:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchUsers();
-  }, [userSearch]);
+  }, [debouncedSearch]);
 
   return (
-    <Stack
-      gap="xs"
-      p="md"
-      bg={colorScheme === 'dark' ? 'gray.8' : 'gray.2'}
-      style={{ borderRadius: '10px 10px 0px 0px' }}
-    >
+    <>
       <Group>
         <Text
           size="xs"
@@ -88,16 +105,54 @@ export const AccessSettings = ({
             Выберите пользователей
           </Text>
           <Autocomplete
-            placeholder="Введите email или имя"
+            key={allowedUsers.length}
+            placeholder="Введите email"
             size="xs"
             flex={8}
             data={users.map((user) => user.email)}
             value={userSearch}
             onChange={setUserSearch}
             onOptionSubmit={handleUserSelect}
+            rightSectionPointerEvents="none"
+            rightSection={
+              isLoading ? (
+                <Loader size="xs" color="cyan" type="dots" mr="md" />
+              ) : null
+            }
           />
         </Group>
       )}
-    </Stack>
+
+      {allowedUsers.length > 0 && (
+        <Group gap="xs" mt="xs">
+          <Text
+            size="xs"
+            fw={500}
+            c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'}
+          >
+            Имеют доступ:
+          </Text>
+          {allowedUsers.map((email) => (
+            <Badge
+              key={email}
+              size="md"
+              variant="gradient"
+              gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
+              rightSection={
+                <ActionIcon
+                  onClick={() => handleRemoveUser(email)}
+                  p={0}
+                  bg="transparent"
+                >
+                  <X size={12} color="white" strokeWidth={3} />
+                </ActionIcon>
+              }
+            >
+              {email}
+            </Badge>
+          ))}
+        </Group>
+      )}
+    </>
   );
 };

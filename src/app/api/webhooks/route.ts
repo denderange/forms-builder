@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   }
 
   const wh = new Webhook(SIGNING_SECRET);
-  const headerPayload = await headers(); // Добавлен await
+  const headerPayload = await headers();
   const svix_id = headerPayload.get('svix-id') ?? '';
   const svix_timestamp = headerPayload.get('svix-timestamp') ?? '';
   const svix_signature = headerPayload.get('svix-signature') ?? '';
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         last_name?: string;
       };
 
-      const id = userData.id ?? ''; // Убедимся, что id не undefined
+      const id = userData.id ?? '';
       if (!id) {
         return new NextResponse('Error: Missing user ID', { status: 400 });
       }

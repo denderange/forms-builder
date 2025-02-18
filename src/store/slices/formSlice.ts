@@ -15,6 +15,11 @@ interface Question {
   isRequired: boolean;
 }
 
+interface Tag {
+  id: string;
+  name: string;
+}
+
 interface FormState {
   formId: string;
   formTitle: string;
@@ -22,6 +27,7 @@ interface FormState {
   questions: Question[];
   accessType: 'public' | 'restricted';
   allowedUsers: string[];
+  tags: Tag[];
 }
 
 interface FormSliceState {
@@ -38,6 +44,7 @@ const initialState: FormSliceState = {
     questions: [],
     accessType: 'public',
     allowedUsers: [],
+    tags: [],
   },
   activeQuestionId: null,
   loading: false,
@@ -140,7 +147,17 @@ const formSlice = createSlice({
     updateQuestionOrder: (state, action: PayloadAction<Question[]>) => {
       state.form.questions = action.payload;
     },
-
+    addTag: (state, action: PayloadAction<Tag>) => {
+      state.form.tags.push(action.payload);
+    },
+    removeTag: (state, action: PayloadAction<string>) => {
+      state.form.tags = state.form.tags.filter(
+        (tag) => tag.id !== action.payload
+      );
+    },
+    setTags: (state, action: PayloadAction<Tag[]>) => {
+      state.form.tags = action.payload;
+    },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
@@ -162,6 +179,9 @@ export const {
   updateQuestionImage,
   removeQuestionImage,
   toggleQuestionRequired,
+  addTag,
+  removeTag,
+  setTags,
   setLoading,
 } = formSlice.actions;
 

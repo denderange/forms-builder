@@ -29,20 +29,29 @@ enum Role {
 model Tag {
   id        String    @id @default(uuid())
   name      String    @unique
-  templates Template[] @relation("TemplateTags")
+  templates TemplateTag[]
+}
+
+model TemplateTag {
+  templateId String
+  tagId      String
+  template   Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([templateId, tagId])
 }
 
 model Template {
-  id          String   @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
   description String
   theme       String?
   imageUrl    String?
-  isPublic    Boolean  @default(true)
-  tags        Tag[]    @relation("TemplateTags")
-  createdAt   DateTime @default(now())
+  isPublic    Boolean      @default(true)
+  tags        TemplateTag[]
+  createdAt   DateTime     @default(now())
   authorId    String
-  author      User     @relation("UserTemplates", fields: [authorId], references: [id])
+  author      User         @relation("UserTemplates", fields: [authorId], references: [id])
 
   questions Question[] @relation("TemplateQuestions")
   forms     Form[]     @relation("TemplateForms")
