@@ -1,7 +1,6 @@
 'use client';
 
 import { ColorSchemeScript, createTheme, MantineProvider } from '@mantine/core';
-import { Notifications } from '@mantine/notifications';
 import { ReactNode } from 'react';
 
 const theme = createTheme({
@@ -17,7 +16,6 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
         defaultColorScheme="light"
       />
       <MantineProvider defaultColorScheme="light" theme={theme}>
-        <Notifications />
         {children}
       </MantineProvider>
     </>

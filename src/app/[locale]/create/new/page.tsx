@@ -15,7 +15,7 @@ import { FormMeta } from '@/components/FormMeta/FormMeta';
 import { useDispatch, useSelector } from 'react-redux';
 import { addQuestion, setFormId, setLoading } from '@/store/slices/formSlice';
 import { RootState } from '@/store/store';
-import { notifications } from '@mantine/notifications';
+import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from '@clerk/nextjs';
 import { useEffect, useMemo } from 'react';
 
@@ -44,11 +44,7 @@ export default function NewFormPage() {
 
   const handleSaveForm = async () => {
     if (!formTitle || !questions.length || !tags.length) {
-      notifications.show({
-        title: 'Ошибка',
-        message: 'Необходимо добавить хотя бы один вопрос и тег.',
-        color: 'red',
-      });
+      toast.error('Необходимо добавить хотя бы один вопрос и тег.');
       return;
     }
 
@@ -72,8 +68,8 @@ export default function NewFormPage() {
       authorId: userId,
     };
 
-    console.log("Sending formData:", JSON.stringify(formData, null, 2));
-    console.log("formData: ", formData)
+    console.log('Sending formData:', JSON.stringify(formData, null, 2));
+    console.log('formData: ', formData);
 
     try {
       dispatch(setLoading(true));
@@ -95,18 +91,10 @@ export default function NewFormPage() {
       // Обновляем Redux с formId
       dispatch(setFormId(data.template.id));
 
-      notifications.show({
-        title: 'Форма сохранена',
-        message: 'Ваша форма успешно сохранена!',
-        color: 'green',
-      });
+      toast.success('Форма успешно сохранена!');
     } catch (error) {
       console.error('Ошибка при сохранении формы:', error);
-      notifications.show({
-        title: 'Ошибка',
-        message: 'Не удалось сохранить форму. Попробуйте ещё раз.',
-        color: 'red',
-      });
+      toast.error('Не удалось сохранить форму. Попробуйте ещё раз.');
     } finally {
       dispatch(setLoading(false));
     }
@@ -157,6 +145,7 @@ export default function NewFormPage() {
           </Group>
         </Stack>
       </Container>
+      <ToastContainer />
     </Box>
   );
 }

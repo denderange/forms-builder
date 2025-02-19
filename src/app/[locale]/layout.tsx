@@ -10,7 +10,6 @@ import Footer from '@/components/Footer/Footer';
 import StoreProvider from '@/providers/StoreProvider';
 import '@mantine/core/styles.css';
 import '@mantine/tiptap/styles.css';
-import '@mantine/notifications/styles.css';
 import './globals.css';
 
 export const metadata: Metadata = {
