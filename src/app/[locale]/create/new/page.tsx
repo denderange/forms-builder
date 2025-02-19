@@ -49,23 +49,23 @@ export default function NewFormPage() {
     }
 
     const formData = {
-      formId: formId || undefined, // Если formId есть, то передаем его
-      formTitle,
-      formDescription,
+      title: formTitle, // исправлено
+      description: formDescription, // исправлено
+      accessType, // совпадает
+      isPublic: accessType === 'PUBLIC', // можно добавить для соответствия схеме
+      allowedUsers,
+      tags,
+      authorId: userId,
       questions: questions.map(
         ({ id, questionTitle, type, options, imageUrl, isRequired }) => ({
           id,
-          questionTitle,
+          title: questionTitle, // исправлено
           type,
           imageUrl,
           isRequired,
           options: options.map(({ id, text }) => ({ id, text })),
         })
       ),
-      accessType,
-      allowedUsers,
-      tags,
-      authorId: userId,
     };
 
     console.log('Sending formData:', JSON.stringify(formData, null, 2));

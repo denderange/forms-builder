@@ -7,9 +7,8 @@ export async function POST(req: NextRequest) {
     console.log('Received body:', JSON.stringify(body, null, 2));
 
     const {
-      formId,
-      formTitle,
-      formDescription,
+      title,
+      description,
       questions,
       accessType,
       allowedUsers,
@@ -17,21 +16,19 @@ export async function POST(req: NextRequest) {
       authorId,
     } = body;
 
-    // Проверка наличия обязательных данных
+    // Проверка обязательных данных
     if (!authorId) {
       return NextResponse.json(
         { success: false, error: 'Author ID is required' },
         { status: 400 }
       );
     }
-
     if (!tags || tags.length === 0) {
       return NextResponse.json(
         { success: false, error: 'At least one tag is required' },
         { status: 400 }
       );
     }
-
     if (!questions || questions.length === 0) {
       return NextResponse.json(
         { success: false, error: 'At least one question is required' },
@@ -41,21 +38,22 @@ export async function POST(req: NextRequest) {
 
     // Подготовка данных для сохранения
     const templateData = {
-      title: formTitle,
-      description: formDescription,
+      title,
+      description,
       accessType,
+      isPublic: accessType === 'PUBLIC', // ✅ Добавлено
       allowedUsers: allowedUsers || [],
       author: { connect: { id: authorId } },
       tags: {
-        connectOrCreate: tags.map((tag: any) => ({
-          where: { name: tag.name },
-          create: { name: tag.name },
-        })),
+        connect: tags.map((tag: any) => ({ id: tag.id })), // ✅ Подключаем теги
+        create: tags
+          .filter((tag: any) => !tag.id) // ✅ Создаём новые
+          .map((tag: any) => ({ name: tag.name })),
       },
       questions: {
         create: questions.map((q: any, index: number) => ({
           id: q.id,
-          questionTitle: q.questionTitle,
+          title: q.questionTitle, // ✅ Исправлено
           type: q.type.toUpperCase(),
           position: index,
           options: {
@@ -67,20 +65,21 @@ export async function POST(req: NextRequest) {
       },
     };
 
-    console.log('templateData: ', templateData); // Для отладки
+    console.log('templateData: ', templateData);
 
     let savedTemplate;
-    if (formId) {
+    if (body.id) {
+      // ✅ Теперь обновляется только если есть `id`
       savedTemplate = await db.template.update({
-        where: { id: formId },
+        where: { id: body.id },
         data: templateData,
       });
-      console.log('Ответ с сервера with ID:', savedTemplate);
+      console.log('Обновленный шаблон:', savedTemplate);
     } else {
       savedTemplate = await db.template.create({
         data: templateData,
       });
-      console.log('Ответ с сервера no ID:', savedTemplate);
+      console.log('Создан новый шаблон:', savedTemplate);
     }
 
     return NextResponse.json({ success: true, template: savedTemplate });
