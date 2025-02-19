@@ -9,23 +9,17 @@ export async function POST(req: NextRequest) {
     const {
       title,
       description,
-      questions,
       accessType,
       allowedUsers,
       tags,
       authorId,
+      questions,
     } = body;
 
     // Проверка обязательных данных
     if (!authorId) {
       return NextResponse.json(
         { success: false, error: 'Author ID is required' },
-        { status: 400 }
-      );
-    }
-    if (!tags || tags.length === 0) {
-      return NextResponse.json(
-        { success: false, error: 'At least one tag is required' },
         { status: 400 }
       );
     }
@@ -36,24 +30,17 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Подготовка данных для сохранения
-    const templateData = {
+    const templateData: any = {
       title,
       description,
       accessType,
-      isPublic: accessType === 'PUBLIC', // ✅ Добавлено
+      isPublic: accessType === 'PUBLIC',
       allowedUsers: allowedUsers || [],
       author: { connect: { id: authorId } },
-      tags: {
-        connect: tags.map((tag: any) => ({ id: tag.id })), // ✅ Подключаем теги
-        create: tags
-          .filter((tag: any) => !tag.id) // ✅ Создаём новые
-          .map((tag: any) => ({ name: tag.name })),
-      },
       questions: {
         create: questions.map((q: any, index: number) => ({
           id: q.id,
-          title: q.questionTitle, // ✅ Исправлено
+          questionTitle: q.title,
           type: q.type.toUpperCase(),
           position: index,
           options: {
@@ -65,11 +52,19 @@ export async function POST(req: NextRequest) {
       },
     };
 
-    console.log('templateData: ', templateData);
+    if (tags?.length) {
+      templateData.tags = {
+        connect: tags
+          .filter((tag: any) => tag.id)
+          .map((tag: any) => ({ id: tag.id })),
+        create: tags
+          .filter((tag: any) => !tag.id)
+          .map((tag: any) => ({ name: tag.name })),
+      };
+    }
 
     let savedTemplate;
     if (body.id) {
-      // ✅ Теперь обновляется только если есть `id`
       savedTemplate = await db.template.update({
         where: { id: body.id },
         data: templateData,

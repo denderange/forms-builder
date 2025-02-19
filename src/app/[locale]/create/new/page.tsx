@@ -100,6 +100,25 @@ export default function NewFormPage() {
     }
   };
 
+  const saveTestData = async (name: string) => {
+    console.log('this is test request');
+
+    const response = await fetch('/api/test', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Test created:', data);
+    } else {
+      console.error('Error:', await response.text());
+    }
+  };
+
   return (
     <Box>
       <Title order={2} size={30} c="gray.5">
@@ -137,7 +156,8 @@ export default function NewFormPage() {
                 size="md"
                 disabled={!formTitle.length || isUserLoading}
                 leftSection={<HardDriveDownload size={16} />}
-                onClick={handleSaveForm}
+                // onClick={handleSaveForm}
+                onClick={() => saveTestData('test 20')}
               >
                 Сохранить форму
               </Button>

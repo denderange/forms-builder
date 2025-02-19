@@ -57,7 +57,7 @@ model TemplateTag {
 model Template {
   id          String       @id @default(uuid())
   title       String
-  description String?
+  description String? 
   theme       String?
   imageUrl    String?
   isPublic    Boolean      @default(true)
@@ -69,7 +69,6 @@ model Template {
   author      User         @relation("UserTemplates", fields: [authorId], references: [id])
   questions   Question[]   @relation("TemplateQuestions")
   forms       Form[]       @relation("TemplateForms")
-
   comments    Comment[]    @relation("TemplateComments")
   likes       Like[]       @relation("TemplateLikes")
 }
@@ -80,9 +79,9 @@ model Question {
   type           QuestionType
   position       Int               @default(0)
   isRequired     Boolean           @default(false)
-  imageUrl       String?           // Опциональное поле для изображения
-  options        QuestionOption[]  // Опции для вопроса
-  templateId     String            // Идентификатор шаблона, к которому принадлежит вопрос
+  imageUrl       String?           
+  options        QuestionOption[]  
+  templateId     String            
   template       Template          @relation("TemplateQuestions", fields: [templateId], references: [id])
 }
 
@@ -101,7 +100,7 @@ model Form {
   template    Template   @relation("TemplateForms", fields: [templateId], references: [id])
   title       String 
   description String?
-  questions   Json       // Хранение вопросов в формате JSON
+  questions   Json       
   createdAt   DateTime   @default(now())
 
   responses   Response[] @relation("FormResponses")
@@ -124,7 +123,7 @@ model Comment {
   templateId  String
   template    Template @relation("TemplateComments", fields: [templateId], references: [id])
 
-  @@index([userId, templateId])  // Индекс для быстрого поиска по пользователю и шаблону
+  @@index([userId, templateId])  
 }
 
 model Like {
@@ -135,5 +134,10 @@ model Like {
   template    Template @relation("TemplateLikes", fields: [templateId], references: [id])
   createdAt   DateTime @default(now())
 
-  @@unique([userId, templateId])  // Уникальный индекс, чтобы один пользователь не мог поставить лайк одному шаблону дважды
+  @@unique([userId, templateId]) 
+}
+
+model Test {
+  id    String @id @default(uuid())
+  name  String
 }
