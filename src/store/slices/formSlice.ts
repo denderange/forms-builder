@@ -11,8 +11,10 @@ interface Question {
   questionTitle: string;
   type: string;
   options: Option[];
-  imageUrl?: string | null;
+  imageUrl?: string | null; // Обработаем поле imageUrl, которое может быть пустым или null
   isRequired: boolean;
+  position: number; // Добавляем позицию для упорядочивания вопросов
+  templateId: string; // Связь с шаблоном
 }
 
 interface Tag {
@@ -21,11 +23,11 @@ interface Tag {
 }
 
 interface FormState {
-  formId: string;
+  formId?: string;
   formTitle: string;
   formDescription: string;
   questions: Question[];
-  accessType: 'public' | 'restricted';
+  accessType: 'PUBLIC' | 'RESTRICTED';
   allowedUsers: string[];
   tags: Tag[];
 }
@@ -42,7 +44,7 @@ const initialState: FormSliceState = {
     formTitle: '',
     formDescription: '',
     questions: [],
-    accessType: 'public',
+    accessType: 'PUBLIC',
     allowedUsers: [],
     tags: [],
   },
@@ -54,15 +56,18 @@ const formSlice = createSlice({
   name: 'form',
   initialState,
   reducers: {
+    setFormId: (state, action: PayloadAction<string>) => {
+      state.form.formId = action.payload;
+    },
     setFormTitle: (state, action: PayloadAction<string>) => {
       state.form.formTitle = action.payload;
     },
     setFormDescription: (state, action: PayloadAction<string>) => {
       state.form.formDescription = action.payload;
     },
-    setAccessType: (state, action: PayloadAction<'public' | 'restricted'>) => {
+    setAccessType: (state, action: PayloadAction<'PUBLIC' | 'RESTRICTED'>) => {
       state.form.accessType = action.payload;
-      if (action.payload === 'public') {
+      if (action.payload === 'PUBLIC') {
         state.form.allowedUsers = [];
       }
     },
@@ -77,6 +82,8 @@ const formSlice = createSlice({
         options: [],
         imageUrl: null,
         isRequired: false,
+        position: 0,
+        templateId: '',
       };
       state.form.questions.push(newQuestion);
       state.activeQuestionId = newQuestion.id;
@@ -165,6 +172,7 @@ const formSlice = createSlice({
 });
 
 export const {
+  setFormId,
   setFormTitle,
   setFormDescription,
   setAccessType,

@@ -27,6 +27,7 @@ export const TextEditor = () => {
     onUpdate: ({ editor }) => {
       dispatch(setFormDescription(editor.getHTML()));
     },
+    immediatelyRender: false,
   });
 
   return (

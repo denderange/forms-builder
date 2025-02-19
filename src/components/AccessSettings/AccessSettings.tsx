@@ -16,8 +16,8 @@ import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
 interface Props {
-  accessType: 'public' | 'restricted';
-  setAccessType: (value: 'public' | 'restricted') => void;
+  accessType: 'PUBLIC' | 'RESTRICTED';
+  setAccessType: (value: 'PUBLIC' | 'RESTRICTED') => void;
   allowedUsers: string[];
   setAllowedUsers: (users: string[]) => void;
 }
@@ -83,18 +83,18 @@ export const AccessSettings = ({
           flex={8}
           size="xs"
           data={[
-            { value: 'public', label: 'Публичный (для всех авторизованных)' },
+            { value: 'PUBLIC', label: 'Публичный (для всех авторизованных)' },
             {
-              value: 'restricted',
+              value: 'RESTRICTED',
               label: 'Ограниченный (по списку пользователей)',
             },
           ]}
           value={accessType}
-          onChange={(value) => setAccessType(value as 'public' | 'restricted')}
+          onChange={(value) => setAccessType(value as 'PUBLIC' | 'RESTRICTED')}
         />
       </Group>
 
-      {accessType === 'restricted' && (
+      {accessType === 'RESTRICTED' && (
         <Group>
           <Text
             size="xs"

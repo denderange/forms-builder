@@ -34,33 +34,36 @@ const TagsInput = () => {
     onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
   });
 
-  const exactOptionMatch = tags.some(
-    (item) => item.name.toLowerCase() === search.toLowerCase()
-  );
+  const exactOptionMatch =
+    Array.isArray(tags) &&
+    tags.some((item) => item.name.toLowerCase() === search.toLowerCase());
 
-  const handleValueSelect = async (val: string) => {
+  const handleValueSelect = (val: string) => {
     if (val === '$create') {
-      const response = await fetch('/api/tags', {
+      fetch('/api/tags', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: search }),
-      });
-
-      if (response.ok) {
-        const createdTag = await response.json();
-        setAvailableTags((prev) => [...prev, createdTag]);
-        setValue((current) => [...current, createdTag.id]);
-        setSearch('');
-        dispatch(setTags([...selectedTags, createdTag]));
-      } else {
-        console.error('Error creating new tag');
-      }
+      })
+        .then((response) => response.json())
+        .then((createdTag) => {
+          setAvailableTags((prev) => [...prev, createdTag]);
+          setValue((current) => [...current, createdTag.id]);
+          setSearch('');
+          dispatch(setTags([...selectedTags, createdTag])); // Обновляем Redux
+        })
+        .catch((error) => console.error('Error creating new tag', error));
     } else {
       setValue((current) =>
         current.includes(val)
           ? current.filter((v) => v !== val)
           : [...current, val]
       );
+
+      const selected = tags.find((tag) => tag.id === val);
+      if (selected) {
+        dispatch(setTags([...selectedTags, selected]));
+      }
     }
   };
 
@@ -94,9 +97,21 @@ const TagsInput = () => {
   useEffect(() => {
     fetch('/api/tags')
       .then((res) => res.json())
-      .then((data) => setAvailableTags(data))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setAvailableTags(data);
+        } else {
+          console.error('Invalid tags format:', data);
+          setAvailableTags([]);
+        }
+      })
       .catch((error) => console.error('Error loading tags:', error));
   }, []);
+
+  useEffect(() => {
+    const selected = tags.filter((tag) => value.includes(tag.id));
+    dispatch(setTags(selected));
+  }, [value, tags, dispatch]);
 
   return (
     <Stack gap={0} mt="xs">
