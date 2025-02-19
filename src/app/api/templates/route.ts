@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       allowedUsers,
       tags,
       authorId,
-    } = body.form;
+    } = body;
 
     // Проверка наличия обязательных данных
     if (!authorId) {
