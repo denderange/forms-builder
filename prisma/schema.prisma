@@ -13,8 +13,9 @@ enum AccessType {
 }
 
 enum Role {
-  user
   admin
+  moderator
+  ordinary
 }
 
 model User {
@@ -22,7 +23,7 @@ model User {
   clerkId   String  @unique
   name      String?
   email     String?
-  role      Role    @default(user)
+  role      Role    @default(ordinary)
   createdAt DateTime @default(now())
 
   templates FormTemplate[]  @relation("UserTemplates")

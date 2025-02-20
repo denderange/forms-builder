@@ -8,10 +8,12 @@ import {
   useMantineColorScheme,
 } from '@mantine/core';
 import { ImagePlus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 export const UploadQuestionImage = ({ questionId }: { questionId: string }) => {
+  const t = useTranslations('UploadQuestionImage');
   const { colorScheme } = useMantineColorScheme();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +50,7 @@ export const UploadQuestionImage = ({ questionId }: { questionId: string }) => {
       {isLoading ? (
         <Loader color="gray" size="xs" type="bars" />
       ) : (
-        <Tooltip label="Вставить изображение">
+        <Tooltip label={t('Insert image')}>
           <ActionIcon
             variant="outline"
             bg={colorScheme === 'dark' ? 'dark.6' : 'white'}

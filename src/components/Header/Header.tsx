@@ -10,7 +10,7 @@ import { Link } from '@/i18n/routing';
 import ClerkButtons from '../Buttons/ClerkButtons/ClerkButtons';
 
 const Header = () => {
-  const t = useTranslations('HomePage');
+  const t = useTranslations('Header');
 
   return (
     <Group
@@ -21,8 +21,7 @@ const Header = () => {
       align="center"
     >
       <Logo />
-      {/* <Title variant="h5">{t('title')}</Title> */}
-      <TextInput placeholder="Поиск..." flex={1} />
+      <TextInput placeholder={t('Search')} flex={1} />
       <Group gap={'md'} style={{ margin: '0px auto' }}>
         <Link href={'/create'}>
           <Button
@@ -30,7 +29,7 @@ const Header = () => {
             gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
             leftSection={<SquarePen size={14} />}
           >
-            Создать форму
+            {t('Create form')}
           </Button>
         </Link>
         <ClerkButtons />

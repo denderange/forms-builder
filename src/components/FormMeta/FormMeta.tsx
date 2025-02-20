@@ -8,28 +8,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { TextEditor } from '../TextEditor/TextEditor';
 import { AccessSettings } from '../AccessSettings/AccessSettings';
-import { useState } from 'react';
 import TagsInput from '../TagsInput/TagsInput';
+import { useTranslations } from 'next-intl';
 
 export const FormMeta = () => {
+  const t = useTranslations('FormMeta');
   const { colorScheme } = useMantineColorScheme();
   const dispatch = useDispatch();
-  const [tags, setTags] = useState<string[]>([]);
   const { formTitle, accessType, allowedUsers } = useSelector(
     (state: RootState) => state.formTemplate.formTemplate
   );
-
-  const handleSubmit = async () => {
-    await fetch('/api/templates', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title: 'Название',
-        description: 'Описание',
-        tags,
-      }),
-    });
-  };
 
   return (
     <Stack gap="2px">
@@ -54,8 +42,8 @@ export const FormMeta = () => {
         bg={colorScheme === 'dark' ? 'gray.8' : 'gray.2'}
       >
         <TextInput
-          label="Название"
-          placeholder="Введите название формы"
+          label={t('Title')}
+          placeholder={t('Enter form title')}
           value={formTitle}
           onChange={(e) => dispatch(setFormTemplateTitle(e.target.value))}
           required

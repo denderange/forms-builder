@@ -3,15 +3,14 @@ import {
   ActionIcon,
   Autocomplete,
   Badge,
-  Box,
   Group,
   Loader,
   Select,
-  Stack,
   Text,
   useMantineColorScheme,
 } from '@mantine/core';
 import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
@@ -28,6 +27,7 @@ export const AccessSettings = ({
   allowedUsers,
   setAllowedUsers,
 }: Props) => {
+  const t = useTranslations('AccessSettings');
   const { colorScheme } = useMantineColorScheme();
   const [userSearch, setUserSearch] = useState('');
   const [users, setUsers] = useState<any[]>([]);
@@ -59,7 +59,7 @@ export const AccessSettings = ({
         const data = await response.json();
         setUsers(data);
       } catch (error) {
-        console.error('Ошибка при загрузке пользователей:', error);
+        console.error('Error loading users', error);
       } finally {
         setIsLoading(false);
       }
@@ -77,16 +77,16 @@ export const AccessSettings = ({
           flex={4}
           c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'}
         >
-          Настройки доступа
+          {t('Access settings')}
         </Text>
         <Select
           flex={8}
           size="xs"
           data={[
-            { value: 'PUBLIC', label: 'Публичный (для всех авторизованных)' },
+            { value: 'PUBLIC', label: t('Public') },
             {
               value: 'RESTRICTED',
-              label: 'Ограниченный (по списку пользователей)',
+              label: t('Limited'),
             },
           ]}
           value={accessType}
@@ -102,11 +102,11 @@ export const AccessSettings = ({
             flex={4}
             c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'}
           >
-            Выберите пользователей
+            {t('Select users')}
           </Text>
           <Autocomplete
             key={allowedUsers.length}
-            placeholder="Введите email"
+            placeholder={t('Enter email')}
             size="xs"
             flex={8}
             data={users.map((user) => user.email)}
@@ -130,7 +130,7 @@ export const AccessSettings = ({
             fw={500}
             c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'}
           >
-            Имеют доступ:
+            {t('Have access to')}
           </Text>
           {allowedUsers.map((email) => (
             <Badge

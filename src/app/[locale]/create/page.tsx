@@ -10,29 +10,25 @@ import {
   Flex,
 } from '@mantine/core';
 import Link from 'next/link';
-import { db } from '@/lib/db';
 import { auth } from '@clerk/nextjs/server';
 import { ClipboardPlus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default async function CreateTemplatePage() {
+  const t = useTranslations('CreateTemplatePage');
+
   const { userId } = await auth();
   if (!userId)
     return (
       <Container>
-        <Text>Для создания форм необходимо войти в систему.</Text>
-        <Link href="/sign-in">Войти</Link>
+        <Text>{t('To create forms you need to log in')}</Text>
+        <Link href="/sign-in">{t('Login')}</Link>
       </Container>
     );
 
-  // const forms = await db.form.findMany({
-  //   where: { userId },
-  //   select: { id: true, template: { select: { title: true } } },
-  //   orderBy: { createdAt: 'desc' },
-  // });
-
   return (
     <>
-      <Title order={2}>Создать форму</Title>
+      <Title order={2}>{t('Create a form')}</Title>
       <Stack gap="md">
         <Box maw={200} mt="md">
           <Card withBorder shadow="sm">
@@ -53,24 +49,11 @@ export default async function CreateTemplatePage() {
                 variant="gradient"
                 gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
               >
-                Пустая форма
+                {t('Empty form')}
               </Button>
             </Link>
           </Card>
         </Box>
-
-        {/* {forms.length > 0 && (
-          <>
-            <Title order={3}>Ваши формы</Title>
-            {forms.map((form) => (
-              <Card key={form.id} withBorder shadow="sm">
-                <Link href={`/create/${form.id}`}>
-                  <Text>{form.template?.title || 'Без названия'}</Text>
-                </Link>
-              </Card>
-            ))}
-          </>
-        )} */}
       </Stack>
     </>
   );

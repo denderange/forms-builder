@@ -1,26 +1,23 @@
 import { Box, Title, Text } from '@mantine/core';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 
-type TemplateCardProps = {
+type Props = {
   title: string;
   description: string;
   author: string;
 };
 
-const TemplateCard = ({ title, description, author }: TemplateCardProps) => {
+const TemplateCard = ({ title, description, author }: Props) => {
+  const t = useTranslations('TemplateCard');
+
   return (
-    <Box
-      p={'sm'}
-      bd={'1px solid red.6'}
-      style={{ borderRadius: '8px' }}
-      // className="p-4 border rounded-lg shadow"
-    >
-      {/* <h3 className="text-lg font-bold">{title}</h3> */}
-      {/* <p className="text-sm text-gray-600">{description}</p> */}
-      {/* <p className="text-xs text-gray-400 mt-2">Автор: {author}</p> */}
+    <Box p={'sm'} bd={'1px solid red.6'} style={{ borderRadius: '8px' }}>
       <Title order={3}>{title}</Title>
       <Text size="md">{description}</Text>
-      <Text size="md">Автор: {author}</Text>
+      <Text size="md">
+        {t('Author')}: {author}
+      </Text>
     </Box>
   );
 };

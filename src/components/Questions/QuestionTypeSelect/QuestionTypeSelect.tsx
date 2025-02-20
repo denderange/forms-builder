@@ -1,4 +1,4 @@
-import { ActionIcon, Box, Group, Select, Switch, Tooltip } from '@mantine/core';
+import { Select } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   updateQuestionOptions,
@@ -7,9 +7,10 @@ import {
 import { RootState } from '@/store/store';
 import { questionTypeOptions } from '@/constants/questionTypeOptions';
 import { v4 as uuidv4 } from 'uuid';
-import { ImagePlus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export const QuestionTypeSelect = ({ id }: { id: string }) => {
+  const t = useTranslations('Questions');
   const dispatch = useDispatch();
 
   const question = useSelector((state: RootState) =>
@@ -41,8 +42,8 @@ export const QuestionTypeSelect = ({ id }: { id: string }) => {
 
   return (
     <Select
-      label="Тип ответа"
-      placeholder="Выберите вариант"
+      label={t('Response type')}
+      placeholder={t('Select an option')}
       data={questionTypeOptions}
       onChange={handleChange}
       value={type}

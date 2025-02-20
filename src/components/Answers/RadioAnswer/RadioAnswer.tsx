@@ -13,10 +13,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateQuestionOptions } from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
 import { v4 as uuidv4 } from 'uuid';
+import { useTranslations } from 'next-intl';
 
 type Option = { id: string; text: string };
 
 export const RadioAnswer = ({ id }: { id: string }) => {
+  const t = useTranslations('RadioAnswer');
   const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
 
@@ -48,7 +50,7 @@ export const RadioAnswer = ({ id }: { id: string }) => {
     <>
       <Stack gap={'0px'}>
         <Box bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'} p="sm">
-          <Text ta="center">Варианты ответов</Text>
+          <Text ta="center">{t('Answer options')}</Text>
           {options.map((option) => (
             <Group key={option.id} justify="space-between" my="5px">
               <Group style={{ flex: '1' }} gap={'0px'}>
@@ -61,7 +63,7 @@ export const RadioAnswer = ({ id }: { id: string }) => {
                   onChange={(e) =>
                     handleUpdateOption(option.id, e.target.value)
                   }
-                  placeholder="Введите вариант"
+                  placeholder={t('Enter option')}
                   pl="sm"
                   flex="1"
                 />

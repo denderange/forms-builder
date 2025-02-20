@@ -9,8 +9,10 @@ import { RichTextEditor } from '@mantine/tiptap';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Stack, Text } from '@mantine/core';
+import { useTranslations } from 'next-intl';
 
 export const TextEditor = () => {
+  const t = useTranslations('TextEditor');
   const dispatch = useDispatch();
   const formDescription = useSelector(
     (state: RootState) => state.formTemplate.formTemplate.formDescription
@@ -21,7 +23,7 @@ export const TextEditor = () => {
       StarterKit,
       Underline,
       Link,
-      Placeholder.configure({ placeholder: 'This is placeholder' }),
+      Placeholder.configure({ placeholder: t('Your text description here') }),
     ],
     content: formDescription,
     onUpdate: ({ editor }) => {
@@ -33,7 +35,7 @@ export const TextEditor = () => {
   return (
     <Stack gap={0}>
       <Text size="sm" fw={500}>
-        Описание
+        {t('Description')}
       </Text>
       <RichTextEditor editor={editor}>
         <RichTextEditor.Toolbar>

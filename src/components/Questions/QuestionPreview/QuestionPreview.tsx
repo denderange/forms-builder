@@ -10,12 +10,12 @@ import {
   RadioGroup,
   Stack,
   Text,
-  TextInput,
   useMantineColorScheme,
   Image,
   Textarea,
 } from '@mantine/core';
 import { Asterisk, GripHorizontal } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useDispatch, useSelector } from 'react-redux';
 
 interface Props {
@@ -24,6 +24,7 @@ interface Props {
 }
 
 export const QuestionPreview = ({ id, dragHandleProps }: Props) => {
+  const t = useTranslations('Questions');
   const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
   const question = useSelector((state: RootState) =>
@@ -62,7 +63,7 @@ export const QuestionPreview = ({ id, dragHandleProps }: Props) => {
       </Box>
       <Group gap={0}>
         <Text size="md" mt="xs" fw={500}>
-          {questionTitle || 'Без названия'}
+          {questionTitle || t('Untitled')}
         </Text>
         {isRequired && <Asterisk strokeWidth={3} size={16} color="#e64980" />}
       </Group>
@@ -98,14 +99,16 @@ export const QuestionPreview = ({ id, dragHandleProps }: Props) => {
               <Checkbox
                 key={opt.id}
                 value={opt.text}
-                label={opt.text || 'Без текста'}
+                label={opt.text || t('No text')}
               />
             ))}
           </Stack>
         </CheckboxGroup>
       )}
 
-      {type === 'text' && <Textarea placeholder="Введите ваш ответ" mt="md" />}
+      {type === 'text' && (
+        <Textarea placeholder={t('Enter your answer')} mt="md" />
+      )}
     </Card>
   );
 };

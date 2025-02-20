@@ -13,7 +13,6 @@ export async function POST(req: NextRequest) {
       authorId,
     } = await req.json();
 
-    // Создаем запись шаблона формы
     const newFormTemplate = await db.formTemplate.create({
       data: {
         formTitle,
@@ -46,7 +45,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(newFormTemplate, { status: 201 });
   } catch (error) {
     return NextResponse.json(
-      { error: 'Произошла ошибка при создании шаблона формы' },
+      { error: 'An error occurred while creating the form template' },
       { status: 500 }
     );
   }

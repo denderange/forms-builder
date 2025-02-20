@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { setTags } from '@/store/slices/formTemplateSlice';
+import { useTranslations } from 'next-intl';
 
 interface Tag {
   id: string;
@@ -22,6 +23,7 @@ interface Tag {
 }
 
 const TagsInput = () => {
+  const t = useTranslations('TagsInput');
   const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
   const selectedTags = useSelector(
@@ -52,7 +54,7 @@ const TagsInput = () => {
           setAvailableTags((prev) => [...prev, createdTag]);
           setValue((current) => [...current, createdTag.id]);
           setSearch('');
-          dispatch(setTags([...selectedTags, createdTag])); // Обновляем Redux
+          dispatch(setTags([...selectedTags, createdTag]));
         })
         .catch((error) => console.error('Error creating new tag', error));
     } else {
@@ -118,7 +120,7 @@ const TagsInput = () => {
   return (
     <Stack gap={0} mt="xs">
       <Text size="xs" fw={500} c={colorScheme === 'dark' ? 'gray.6' : 'gray.7'}>
-        Tags:
+        {t('Tags')}
       </Text>
       <Combobox
         store={combobox}
@@ -135,7 +137,7 @@ const TagsInput = () => {
                   onFocus={() => combobox.openDropdown()}
                   onBlur={() => combobox.closeDropdown()}
                   value={search}
-                  placeholder="Search or add tags"
+                  placeholder={t('Search or add tags')}
                   onChange={(event) => setSearch(event.currentTarget.value)}
                   onKeyDown={(event) => {
                     if (event.key === 'Backspace' && search.length === 0) {
@@ -156,14 +158,14 @@ const TagsInput = () => {
 
               {!exactOptionMatch && search.trim().length > 0 && (
                 <Combobox.Option value="$create">
-                  + Create "{search}"
+                  {t('plus create')} "{search}"
                 </Combobox.Option>
               )}
 
               {exactOptionMatch &&
                 search.trim().length > 0 &&
                 options.length === 0 && (
-                  <Combobox.Empty>No matches found</Combobox.Empty>
+                  <Combobox.Empty>{t('No matches found')}</Combobox.Empty>
                 )}
             </Combobox.Options>
           </div>

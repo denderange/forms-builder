@@ -6,10 +6,7 @@ export async function GET() {
     const tags = await db.tag.findMany();
     return NextResponse.json(tags);
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Ошибка при получении тегов' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error getting tags' }, { status: 500 });
   }
 }
 
@@ -18,7 +15,7 @@ export async function POST(req: NextRequest) {
     const { name } = await req.json();
     if (!name) {
       return NextResponse.json(
-        { error: 'Название тега обязательно' },
+        { error: 'Tag name is required' },
         { status: 400 }
       );
     }
@@ -30,9 +27,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(tag);
   } catch (error) {
-    return NextResponse.json(
-      { error: 'Ошибка при создании тега' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Error creating tag' }, { status: 500 });
   }
 }

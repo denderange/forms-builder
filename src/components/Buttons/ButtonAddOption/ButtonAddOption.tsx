@@ -1,11 +1,14 @@
 import { Button } from '@mantine/core';
 import { TicketPlus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   onClick: () => void;
 };
 
 export const ButtonAddOption = ({ onClick }: Props) => {
+  const t = useTranslations('Buttons');
+
   return (
     <Button
       size="xs"
@@ -16,7 +19,7 @@ export const ButtonAddOption = ({ onClick }: Props) => {
       fullWidth
       mt="lg"
     >
-      Добавить вариант
+      {t('Add option')}
     </Button>
   );
 };

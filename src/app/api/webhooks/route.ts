@@ -52,8 +52,9 @@ export async function POST(req: Request) {
 
       const email = userData.email_addresses?.[0]?.email_address || null;
       const name =
-        `${userData.first_name || ''} ${userData.last_name || ''}`.trim() ||
-        null;
+        userData.first_name || userData.last_name
+          ? `${userData.first_name ?? ''} ${userData.last_name ?? ''}`.trim()
+          : null;
 
       const existingUser = await db.user.findUnique({ where: { clerkId: id } });
 

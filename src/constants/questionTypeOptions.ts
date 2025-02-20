@@ -1,5 +1,9 @@
+import { useTranslations } from 'next-intl';
+
+const t = useTranslations('questionTypeOptions');
+
 export const questionTypeOptions = [
-  { value: 'text', label: 'Текст' },
-  { value: 'radio', label: 'Один вариант' },
-  { value: 'checkbox', label: 'Несколько вариантов' },
+  { value: 'text', label: t('Text') },
+  { value: 'radio', label: t('One option') },
+  { value: 'checkbox', label: t('Several options') },
 ];

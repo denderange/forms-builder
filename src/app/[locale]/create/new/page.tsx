@@ -21,9 +21,12 @@ import {
 import { RootState } from '@/store/store';
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from '@clerk/nextjs';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function NewFormPage() {
+  const t = useTranslations('CreateNewForm');
+
   const dispatch = useDispatch();
   const { isLoaded, userId } = useAuth();
 
@@ -34,7 +37,6 @@ export default function NewFormPage() {
     accessType,
     allowedUsers,
     tags,
-    // formId,
   } = useSelector((state: RootState) => state.formTemplate.formTemplate);
   const loading = useSelector((state: RootState) => state.formTemplate.loading);
 
@@ -48,7 +50,7 @@ export default function NewFormPage() {
 
   const handleSaveForm = async () => {
     if (!formTitle) {
-      toast.error('Please fill out the form title');
+      toast.error(t('Please fill from the forms of the title'));
       return;
     }
 
@@ -74,47 +76,28 @@ export default function NewFormPage() {
       if (response.ok) {
         const data = await response.json();
         dispatch(setFormTemplateId(data.id));
-        toast.success('Form saved successfully');
+        toast.success(t('Form saved successfully'));
       } else {
         const errorText = await response.text();
         toast.error(`Error saving form: ${errorText}`);
       }
     } catch (error) {
-      toast.error('An error occurred while saving the form');
+      toast.error(t('An error occurred while saving the form'));
     } finally {
       dispatch(setLoading(false));
-    }
-  };
-
-  const saveTestData = async (name: string) => {
-    console.log('this is test request');
-
-    const response = await fetch('/api/test', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Test created:', data);
-    } else {
-      console.error('Error:', await response.text());
     }
   };
 
   return (
     <Box>
       <Title order={2} size={30} c="gray.5">
-        Новая форма
+        {t('New form')}
       </Title>
       <Container size="sm" mt="lg">
         <Stack gap="md">
           <FormMeta />
           <Title order={3} c="dimmed">
-            Вопросы
+            {t('Questions')}
           </Title>
 
           <QuestionList />
@@ -127,15 +110,15 @@ export default function NewFormPage() {
               onClick={() => dispatch(addQuestion())}
               leftSection={<Plus size={16} />}
             >
-              Добавить вопрос
+              {t('Add a question')}
             </Button>
             <Tooltip
               label={
                 formTitle.length
-                  ? 'Сохранить и опубликовать'
-                  : 'Заполните название формы'
+                  ? t('Save and publish')
+                  : t('Fill in the form title')
               }
-              color={!formTitle.length ? 'gray' : undefined} // Избегаем пустой строки
+              color={!formTitle.length ? 'gray' : undefined}
             >
               <Button
                 loading={loading}
@@ -143,10 +126,8 @@ export default function NewFormPage() {
                 disabled={!formTitle.length || isUserLoading}
                 leftSection={<HardDriveDownload size={16} />}
                 onClick={handleSaveForm}
-                // onClick={() => saveTestData('test 201')}
-                // onClick={() => console.log('sample log')}
               >
-                Сохранить форму
+                {t('Save form')}
               </Button>
             </Tooltip>
           </Group>

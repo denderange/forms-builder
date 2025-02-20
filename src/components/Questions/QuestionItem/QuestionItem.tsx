@@ -26,8 +26,10 @@ import {
 } from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
 import { UploadQuestionImage } from '@/components/UploadQuestionImage/UploadQuestionImage';
+import { useTranslations } from 'next-intl';
 
 export const QuestionItem = ({ id }: { id: string }) => {
+  const t = useTranslations('Questions');
   const { colorScheme } = useMantineColorScheme();
   const dispatch = useDispatch();
 
@@ -60,14 +62,14 @@ export const QuestionItem = ({ id }: { id: string }) => {
         <Group gap="lg" bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}>
           <UploadQuestionImage questionId={id} />
           <Switch
-            label="Обязательный вопрос"
+            label={t('Mandatory question')}
             checked={question.isRequired}
             onChange={() => dispatch(toggleQuestionRequired({ id }))}
             ml={'auto'}
             color="cyan"
           />
         </Group>
-        <Tooltip label="Удалить вопрос" color="pink">
+        <Tooltip label={t('Delete question')} color="pink">
           <ActionIcon
             variant="outline"
             color="pink.7"
@@ -88,7 +90,7 @@ export const QuestionItem = ({ id }: { id: string }) => {
             height={160}
             style={{ border: '1px solid #ced4da' }}
           />
-          <Tooltip label="Удалить изображение" color="pink">
+          <Tooltip label={t('Delete image')} color="pink">
             <ActionIcon
               variant="outline"
               bg={colorScheme === 'dark' ? 'dark.0' : 'white'}
@@ -111,8 +113,8 @@ export const QuestionItem = ({ id }: { id: string }) => {
         bg={colorScheme === 'dark' ? 'dark.5' : 'gray.0'}
       >
         <TextInput
-          label="Question"
-          placeholder="Вопрос"
+          label={t('Question')}
+          placeholder={t('Question')}
           value={questionTitle}
           onChange={(e) =>
             dispatch(updateQuestionTitle({ id, text: e.target.value }))

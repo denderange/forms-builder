@@ -1,29 +1,17 @@
 import { Link } from '@/i18n/routing';
-// import { getTags } from '@/lib/templateService';
-import { Box, Button, Flex, Group, Text, Title } from '@mantine/core';
-import React, { useEffect, useState } from 'react';
+import { Box, Button, Group, Title } from '@mantine/core';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 const TagCloud = () => {
+  const t = useTranslations('TagCloud');
   const [tags, setTags] = useState<string[]>([]);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const tagData = await getTags();
-
-  //       setTags(tagData);
-  //     } catch (error) {
-  //       console.error('Ошибка загрузки данных:', error);
-  //     }
-  //   }
-
-  //   fetchData();
-  // }, []);
   return (
     <Box mt={'md'}>
-      <Title order={2}>Облако тегов</Title>
+      <Title order={2}>{t('Tag cloud')}</Title>
       <Group my="md">
-        <Title order={2}>Теги</Title>
+        <Title order={2}>{t('Tags')}</Title>
         <Group>
           {tags.map((tag, index) => (
             <Link href={`/search?tag=${tag}`} key={index}>

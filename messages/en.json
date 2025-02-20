@@ -6,5 +6,97 @@
   "LocaleSwitcher": {
     "label": "Change language",
     "locale": "{locale, select, de {Deutsch} en {English} other {Unknown}}"
+  },
+  "Buttons": {
+    "Add option": "Add option",
+    "Sign In": "Sign In"
+  },
+  "Header": {
+    "Search": "Search...",
+    "Create form": "Create form"
+  },
+  "CreateTemplatePage": {
+    "To create forms you need to log in": "To create forms you need to log in.",
+    "Login": "Login",
+    "Create a form": "Create a form",
+    "Empty form": "Empty form"
+  },
+  "NewFormPage": {
+    "New form": "New form",
+    "Questions": "Questions",
+    "Add a question": "Add a question",
+    "Save and publish": "Save and publish",
+    "Fill in the form title": "Fill in the form title",
+    "Please fill from the forms of the title": "Please fill from the forms of the title",
+    "Form saved successfully": "Form saved successfully",
+    "An error occurred while saving the form": "An error occurred while saving the form",
+    "Save form": "Save form"
+  },
+  "AccessSettings": {
+    "Error loading users": "Error loading users:",
+    "Access settings": "Access settings",
+    "Public": "Public (for all authorized)",
+    "Limited": "Limited (by user list)",
+    "Enter email": "Enter email",
+    "Select users": "Select users",
+    "Have access to": "Have access to:"
+  },
+  "CheckboxAnswer": {
+    "Answer options": "Answer options",
+    "Enter option": "Enter option"
+  },
+  "RadioAnswer": {
+    "Answer options": "Answer options",
+    "Enter option": "Enter option"
+  },
+  "TextAnswer": {
+    "Text Answer": "The user's response will be here"
+  },
+  "FormMeta": {
+    "Title": "Title",
+    "Enter form title": "Enter form title"
+  },
+  "PopularTemplates": {
+    "Top popular templates": "Top popular templates",
+    "Popular templates": "Popular templates"
+  },
+  "Questions": {
+    "Mandatory question": "Mandatory question",
+    "Delete question": "Delete question",
+    "Delete image": "Delete image",
+    "Question": "Question",
+    "Untitled": "Untitled",
+    "No text": "No text",
+    "Enter your answer": "Enter your answer",
+    "Response type": "Response type",
+    "Select an option": "Select an option"
+  },
+  "TagCloud": {
+    "Tag cloud": "Tag cloud",
+    "Tags": "Tags"
+  },
+  "TagsInput": {
+    "Search or add tags": "Search or add tags",
+    "plus create": "+ Create",
+    "No matches found": "No matches found",
+    "Tags": "Tags:"
+  },
+  "TemplateCard": {
+    "Author": "Author"
+  },
+  "TextEditor": {
+    "Your text description here": "Your text description here",
+    "Description": "Description"
+  },
+  "Templates": {
+    "Latest templates": "Latest templates"
+  },
+  "UploadQuestionImage": {
+    "Insert image": "Insert image"
+  },
+  "questionTypeOptions": {
+    "Text": "Text",
+    "One option": "One option",
+    "Several options": "Several options"
   }
 }

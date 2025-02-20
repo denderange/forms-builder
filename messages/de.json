@@ -6,5 +6,97 @@
   "LocaleSwitcher": {
     "label": "Sprache ändern",
     "locale": "{locale, select, de {Deutsch} en {English} other {Unknown}}"
+  },
+  "Buttons": {
+    "Add option": "Option hinzufügen",
+    "Sign In": "Anmelden"
+  },
+  "Header": {
+    "Search": "Suche...",
+    "Create form": "Formular erstellen"
+  },
+  "CreateTemplatePage": {
+    "To create forms you need to log in": "Um Formulare zu erstellen, müssen Sie sich einloggen.",
+    "Login": "Einloggen",
+    "Create a form": "Formular erstellen",
+    "Empty form": "Leeres Formular"
+  },
+  "NewFormPage": {
+    "New form": "Neues Formular",
+    "Questions": "Fragen",
+    "Add a question": "Frage hinzufügen",
+    "Save and publish": "Speichern und veröffentlichen",
+    "Fill in the form title": "Geben Sie den Formulartitel ein",
+    "Please fill from the forms of the title": "Bitte füllen Sie den Titel der Formulare aus",
+    "Form saved successfully": "Formular erfolgreich gespeichert",
+    "An error occurred while saving the form": "Beim Speichern des Formulars ist ein Fehler aufgetreten",
+    "Save form": "Formular speichern"
+  },
+  "AccessSettings": {
+    "Error loading users": "Fehler beim Laden der Benutzer:",
+    "Access settings": "Zugangseinstellungen",
+    "Public": "Öffentlich (für alle autorisierten)",
+    "Limited": "Eingeschränkt (nach Benutzerliste)",
+    "Enter email": "E-Mail eingeben",
+    "Select users": "Benutzer auswählen",
+    "Have access to": "Haben Zugriff auf:"
+  },
+  "CheckboxAnswer": {
+    "Answer options": "Antwortoptionen",
+    "Enter option": "Option eingeben"
+  },
+  "RadioAnswer": {
+    "Answer options": "Antwortoptionen",
+    "Enter option": "Option eingeben"
+  },
+  "TextAnswer": {
+    "Text Answer": "Die Antwort des Benutzers wird hier sein"
+  },
+  "FormMeta": {
+    "Title": "Titel",
+    "Enter form title": "Formulartitel eingeben"
+  },
+  "PopularTemplates": {
+    "Top popular templates": "Top-beliebte Vorlagen",
+    "Popular templates": "Beliebte Vorlagen"
+  },
+  "Questions": {
+    "Mandatory question": "Pflichtfrage",
+    "Delete question": "Frage löschen",
+    "Delete image": "Bild löschen",
+    "Question": "Frage",
+    "Untitled": "Ohne Titel",
+    "No text": "Kein Text",
+    "Enter your answer": "Geben Sie Ihre Antwort ein",
+    "Response type": "Antworttyp",
+    "Select an option": "Option auswählen"
+  },
+  "TagCloud": {
+    "Tag cloud": "Schlagwortwolke",
+    "Tags": "Tags"
+  },
+  "TagsInput": {
+    "Search or add tags": "Suchen oder Tags hinzufügen",
+    "plus create": "+ Erstellen",
+    "No matches found": "Keine Übereinstimmungen gefunden",
+    "Tags": "Tags:"
+  },
+  "TemplateCard": {
+    "Author": "Autor"
+  },
+  "TextEditor": {
+    "Your text description here": "Ihre Textbeschreibung hier",
+    "Description": "Beschreibung"
+  },
+  "Templates": {
+    "Latest templates": "Neueste Vorlagen"
+  },
+  "UploadQuestionImage": {
+    "Insert image": "Bild einfügen"
+  },
+  "questionTypeOptions": {
+    "Text": "Text",
+    "One option": "Eine Option",
+    "Several options": "Mehrere Optionen"
   }
 }
