@@ -1,7 +1,7 @@
 'use client';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setFormDescription } from '@/store/slices/formSlice';
+import { setFormTemplateDescription } from '@/store/slices/formTemplateSlice';
 import Underline from '@tiptap/extension-underline';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -13,7 +13,7 @@ import { Stack, Text } from '@mantine/core';
 export const TextEditor = () => {
   const dispatch = useDispatch();
   const formDescription = useSelector(
-    (state: RootState) => state.form.form.formDescription
+    (state: RootState) => state.formTemplate.formTemplate.formDescription
   );
 
   const editor = useEditor({
@@ -25,7 +25,7 @@ export const TextEditor = () => {
     ],
     content: formDescription,
     onUpdate: ({ editor }) => {
-      dispatch(setFormDescription(editor.getHTML()));
+      dispatch(setFormTemplateDescription(editor.getHTML()));
     },
     immediatelyRender: false,
   });

@@ -1,4 +1,4 @@
-import { setActiveQuestion } from '@/store/slices/formSlice';
+import { setActiveQuestion } from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
 import {
   Box,
@@ -27,7 +27,7 @@ export const QuestionPreview = ({ id, dragHandleProps }: Props) => {
   const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
   const question = useSelector((state: RootState) =>
-    state.form.form.questions.find((q) => q.id === id)
+    state.formTemplate.formTemplate.questions.find((q) => q.id === id)
   );
 
   if (!question) {

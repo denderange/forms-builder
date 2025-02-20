@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   updateQuestionOptions,
   updateQuestionType,
-} from '@/store/slices/formSlice';
+} from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
 import { questionTypeOptions } from '@/constants/questionTypeOptions';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,7 +13,7 @@ export const QuestionTypeSelect = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
 
   const question = useSelector((state: RootState) =>
-    state.form.form.questions.find((q) => q.id === id)
+    state.formTemplate.formTemplate.questions.find((q) => q.id === id)
   );
 
   if (!question) return null;

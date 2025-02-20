@@ -2,8 +2,8 @@ import { Stack, TextInput, useMantineColorScheme } from '@mantine/core';
 import {
   setAccessType,
   setAllowedUsers,
-  setFormTitle,
-} from '@/store/slices/formSlice';
+  setFormTemplateTitle,
+} from '@/store/slices/formTemplateSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import { TextEditor } from '../TextEditor/TextEditor';
@@ -16,7 +16,7 @@ export const FormMeta = () => {
   const dispatch = useDispatch();
   const [tags, setTags] = useState<string[]>([]);
   const { formTitle, accessType, allowedUsers } = useSelector(
-    (state: RootState) => state.form.form
+    (state: RootState) => state.formTemplate.formTemplate
   );
 
   const handleSubmit = async () => {
@@ -57,7 +57,7 @@ export const FormMeta = () => {
           label="Название"
           placeholder="Введите название формы"
           value={formTitle}
-          onChange={(e) => dispatch(setFormTitle(e.target.value))}
+          onChange={(e) => dispatch(setFormTemplateTitle(e.target.value))}
           required
         />
 

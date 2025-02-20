@@ -13,7 +13,11 @@ import { QuestionList } from '@/components/Questions/QuestionList/QuestionList';
 import { HardDriveDownload, Plus } from 'lucide-react';
 import { FormMeta } from '@/components/FormMeta/FormMeta';
 import { useDispatch, useSelector } from 'react-redux';
-import { addQuestion, setFormId, setLoading } from '@/store/slices/formSlice';
+import {
+  addQuestion,
+  setFormTemplateId,
+  setLoading,
+} from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from '@clerk/nextjs';
@@ -30,9 +34,9 @@ export default function NewFormPage() {
     accessType,
     allowedUsers,
     tags,
-    formId,
-  } = useSelector((state: RootState) => state.form.form);
-  const loading = useSelector((state: RootState) => state.form.loading);
+    // formId,
+  } = useSelector((state: RootState) => state.formTemplate.formTemplate);
+  const loading = useSelector((state: RootState) => state.formTemplate.loading);
 
   const isUserLoading = !isLoaded || !userId;
 
@@ -43,58 +47,40 @@ export default function NewFormPage() {
   }, [dispatch, questions.length]);
 
   const handleSaveForm = async () => {
-    if (!formTitle || !questions.length || !tags.length) {
-      toast.error('Необходимо добавить хотя бы один вопрос и тег.');
+    if (!formTitle) {
+      toast.error('Please fill out the form title');
       return;
     }
 
-    const formData = {
-      title: formTitle, // исправлено
-      description: formDescription, // исправлено
-      accessType, // совпадает
-      isPublic: accessType === 'PUBLIC', // можно добавить для соответствия схеме
-      allowedUsers,
-      tags,
-      authorId: userId,
-      questions: questions.map(
-        ({ id, questionTitle, type, options, imageUrl, isRequired }) => ({
-          id,
-          title: questionTitle, // исправлено
-          type,
-          imageUrl,
-          isRequired,
-          options: options.map(({ id, text }) => ({ id, text })),
-        })
-      ),
-    };
-
-    console.log('Sending formData:', JSON.stringify(formData, null, 2));
-    console.log('formData: ', formData);
+    dispatch(setLoading(true));
 
     try {
-      dispatch(setLoading(true));
-
       const response = await fetch('/api/templates', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          formTitle,
+          formDescription,
+          questions,
+          accessType,
+          allowedUsers,
+          tags,
+          authorId: userId,
+        }),
       });
 
-      if (!response.ok) {
-        throw new Error(`Ошибка: ${response.status}`);
+      if (response.ok) {
+        const data = await response.json();
+        dispatch(setFormTemplateId(data.id));
+        toast.success('Form saved successfully');
+      } else {
+        const errorText = await response.text();
+        toast.error(`Error saving form: ${errorText}`);
       }
-
-      const data = await response.json();
-
-      // Обновляем Redux с formId
-      dispatch(setFormId(data.template.id));
-
-      toast.success('Форма успешно сохранена!');
     } catch (error) {
-      console.error('Ошибка при сохранении формы:', error);
-      toast.error('Не удалось сохранить форму. Попробуйте ещё раз.');
+      toast.error('An error occurred while saving the form');
     } finally {
       dispatch(setLoading(false));
     }
@@ -156,8 +142,9 @@ export default function NewFormPage() {
                 size="md"
                 disabled={!formTitle.length || isUserLoading}
                 leftSection={<HardDriveDownload size={16} />}
-                // onClick={handleSaveForm}
-                onClick={() => saveTestData('test 20')}
+                onClick={handleSaveForm}
+                // onClick={() => saveTestData('test 201')}
+                // onClick={() => console.log('sample log')}
               >
                 Сохранить форму
               </Button>

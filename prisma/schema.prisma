@@ -17,14 +17,6 @@ enum Role {
   admin
 }
 
-enum QuestionType {
-  SHORT_TEXT
-  LONG_TEXT
-  NUMBER
-  CHECKBOX
-  RADIO
-}
-
 model User {
   id        String  @id @default(uuid())
   clerkId   String  @unique
@@ -33,56 +25,49 @@ model User {
   role      Role    @default(user)
   createdAt DateTime @default(now())
 
-  templates Template[]  @relation("UserTemplates")
+  templates FormTemplate[]  @relation("UserTemplates")
   forms     Form[]      @relation("UserForms")
-  comments  Comment[]   @relation("UserComments")  // Связь с комментариями
-  likes     Like[]      @relation("UserLikes")     // Связь с лайками
+  comments  Comment[]   @relation("UserComments")
+  likes     Like[]      @relation("UserLikes")
 }
 
 model Tag {
   id        String    @id @default(uuid())
   name      String    @unique
-  templates TemplateTag[]
+  formTemplateId String?
+  formTemplate   FormTemplate? @relation(fields: [formTemplateId], references: [id])
 }
 
-model TemplateTag {
-  templateId String
-  tagId      String
-  template   Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  tag        Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+model FormTemplate {
+  id              String      @id @default(uuid())
+  formTitle       String
+  formDescription String?     @default("")
+  questions       Question[]
+  accessType      AccessType  @default(PUBLIC)
+  allowedUsers    String[]    @default([])
+  tags            Tag[]
 
-  @@id([templateId, tagId])
-}
-
-model Template {
-  id          String       @id @default(uuid())
-  title       String
-  description String? 
-  theme       String?
-  imageUrl    String?
-  isPublic    Boolean      @default(true)
-  accessType  AccessType   @default(PUBLIC)
-  allowedUsers String[]    @default([])
-  tags        TemplateTag[]
   createdAt   DateTime     @default(now())
   authorId    String
   author      User         @relation("UserTemplates", fields: [authorId], references: [id])
-  questions   Question[]   @relation("TemplateQuestions")
-  forms       Form[]       @relation("TemplateForms")
+  theme       String?
   comments    Comment[]    @relation("TemplateComments")
   likes       Like[]       @relation("TemplateLikes")
+  isPublic    Boolean      @default(true)
+
+  Form Form[] @relation("FormTemplates")
 }
 
 model Question {
-  id             String            @id @default(uuid())
-  questionTitle  String
-  type           QuestionType
-  position       Int               @default(0)
-  isRequired     Boolean           @default(false)
-  imageUrl       String?           
-  options        QuestionOption[]  
-  templateId     String            
-  template       Template          @relation("TemplateQuestions", fields: [templateId], references: [id])
+  id            String   @id @default(uuid())
+  questionTitle String
+  type          String
+  options       QuestionOption[]
+  imageUrl      String?
+  isRequired    Boolean  @default(false)
+  position      Int 
+  formTemplateId String
+  formTemplate  FormTemplate @relation(fields: [formTemplateId], references: [id])
 }
 
 model QuestionOption {
@@ -97,7 +82,7 @@ model Form {
   userId      String
   user        User       @relation("UserForms", fields: [userId], references: [id])
   templateId  String
-  template    Template   @relation("TemplateForms", fields: [templateId], references: [id])
+  template    FormTemplate @relation("FormTemplates", fields: [templateId], references: [id])
   title       String 
   description String?
   questions   Json       
@@ -121,7 +106,7 @@ model Comment {
   userId      String
   user        User     @relation("UserComments", fields: [userId], references: [id])
   templateId  String
-  template    Template @relation("TemplateComments", fields: [templateId], references: [id])
+  template    FormTemplate @relation("TemplateComments", fields: [templateId], references: [id])
 
   @@index([userId, templateId])  
 }
@@ -131,7 +116,7 @@ model Like {
   userId      String
   user        User     @relation("UserLikes", fields: [userId], references: [id])
   templateId  String
-  template    Template @relation("TemplateLikes", fields: [templateId], references: [id])
+  template    FormTemplate @relation("TemplateLikes", fields: [templateId], references: [id])
   createdAt   DateTime @default(now())
 
   @@unique([userId, templateId]) 

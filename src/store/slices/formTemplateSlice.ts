@@ -22,7 +22,7 @@ interface Tag {
   name: string;
 }
 
-interface FormState {
+interface FormTemplateState {
   formId?: string;
   formTitle: string;
   formDescription: string;
@@ -32,15 +32,15 @@ interface FormState {
   tags: Tag[];
 }
 
-interface FormSliceState {
-  form: FormState;
+interface FormTemplateSliceState {
+  formTemplate: FormTemplateState;
   activeQuestionId: string | null;
   loading: boolean;
 }
 
-const initialState: FormSliceState = {
-  form: {
-    formId: '',
+const initialState: FormTemplateSliceState = {
+  formTemplate: {
+    // formId: '',
     formTitle: '',
     formDescription: '',
     questions: [],
@@ -52,27 +52,27 @@ const initialState: FormSliceState = {
   loading: false,
 };
 
-const formSlice = createSlice({
+const formTemplateSlice = createSlice({
   name: 'form',
   initialState,
   reducers: {
-    setFormId: (state, action: PayloadAction<string>) => {
-      state.form.formId = action.payload;
+    setFormTemplateId: (state, action: PayloadAction<string>) => {
+      state.formTemplate.formId = action.payload;
     },
-    setFormTitle: (state, action: PayloadAction<string>) => {
-      state.form.formTitle = action.payload;
+    setFormTemplateTitle: (state, action: PayloadAction<string>) => {
+      state.formTemplate.formTitle = action.payload;
     },
-    setFormDescription: (state, action: PayloadAction<string>) => {
-      state.form.formDescription = action.payload;
+    setFormTemplateDescription: (state, action: PayloadAction<string>) => {
+      state.formTemplate.formDescription = action.payload;
     },
     setAccessType: (state, action: PayloadAction<'PUBLIC' | 'RESTRICTED'>) => {
-      state.form.accessType = action.payload;
+      state.formTemplate.accessType = action.payload;
       if (action.payload === 'PUBLIC') {
-        state.form.allowedUsers = [];
+        state.formTemplate.allowedUsers = [];
       }
     },
     setAllowedUsers: (state, action: PayloadAction<string[]>) => {
-      state.form.allowedUsers = action.payload;
+      state.formTemplate.allowedUsers = action.payload;
     },
     addQuestion: (state) => {
       const newQuestion: Question = {
@@ -85,11 +85,11 @@ const formSlice = createSlice({
         position: 0,
         templateId: '',
       };
-      state.form.questions.push(newQuestion);
+      state.formTemplate.questions.push(newQuestion);
       state.activeQuestionId = newQuestion.id;
     },
     removeQuestion: (state, action: PayloadAction<string>) => {
-      state.form.questions = state.form.questions.filter(
+      state.formTemplate.questions = state.formTemplate.questions.filter(
         (q) => q.id !== action.payload
       );
       if (state.activeQuestionId === action.payload) {
@@ -100,7 +100,7 @@ const formSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; text: string }>
     ) => {
-      const question = state.form.questions.find(
+      const question = state.formTemplate.questions.find(
         (q) => q.id === action.payload.id
       );
       if (question) question.questionTitle = action.payload.text;
@@ -109,7 +109,7 @@ const formSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; type: string }>
     ) => {
-      const question = state.form.questions.find(
+      const question = state.formTemplate.questions.find(
         (q) => q.id === action.payload.id
       );
       if (question) question.type = action.payload.type;
@@ -118,7 +118,7 @@ const formSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; options: Option[] }>
     ) => {
-      const question = state.form.questions.find(
+      const question = state.formTemplate.questions.find(
         (q) => q.id === action.payload.id
       );
       if (question) question.options = action.payload.options;
@@ -127,13 +127,13 @@ const formSlice = createSlice({
       state,
       action: PayloadAction<{ id: string; imageUrl: string }>
     ) => {
-      const question = state.form.questions.find(
+      const question = state.formTemplate.questions.find(
         (q) => q.id === action.payload.id
       );
       if (question) question.imageUrl = action.payload.imageUrl;
     },
     removeQuestionImage: (state, action: PayloadAction<{ id: string }>) => {
-      const question = state.form.questions.find(
+      const question = state.formTemplate.questions.find(
         (q) => q.id === action.payload.id
       );
       if (question) {
@@ -141,7 +141,7 @@ const formSlice = createSlice({
       }
     },
     toggleQuestionRequired: (state, action: PayloadAction<{ id: string }>) => {
-      const question = state.form.questions.find(
+      const question = state.formTemplate.questions.find(
         (q) => q.id === action.payload.id
       );
       if (question) {
@@ -152,18 +152,18 @@ const formSlice = createSlice({
       state.activeQuestionId = action.payload;
     },
     updateQuestionOrder: (state, action: PayloadAction<Question[]>) => {
-      state.form.questions = action.payload;
+      state.formTemplate.questions = action.payload;
     },
     addTag: (state, action: PayloadAction<Tag>) => {
-      state.form.tags.push(action.payload);
+      state.formTemplate.tags.push(action.payload);
     },
     removeTag: (state, action: PayloadAction<string>) => {
-      state.form.tags = state.form.tags.filter(
+      state.formTemplate.tags = state.formTemplate.tags.filter(
         (tag) => tag.id !== action.payload
       );
     },
     setTags: (state, action: PayloadAction<Tag[]>) => {
-      state.form.tags = action.payload;
+      state.formTemplate.tags = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
@@ -172,9 +172,9 @@ const formSlice = createSlice({
 });
 
 export const {
-  setFormId,
-  setFormTitle,
-  setFormDescription,
+  setFormTemplateId,
+  setFormTemplateTitle,
+  setFormTemplateDescription,
   setAccessType,
   setAllowedUsers,
   addQuestion,
@@ -191,6 +191,6 @@ export const {
   removeTag,
   setTags,
   setLoading,
-} = formSlice.actions;
+} = formTemplateSlice.actions;
 
-export default formSlice.reducer;
+export default formTemplateSlice.reducer;

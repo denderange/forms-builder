@@ -23,7 +23,7 @@ import {
   removeQuestion,
   removeQuestionImage,
   toggleQuestionRequired,
-} from '@/store/slices/formSlice';
+} from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
 import { UploadQuestionImage } from '@/components/UploadQuestionImage/UploadQuestionImage';
 
@@ -32,7 +32,7 @@ export const QuestionItem = ({ id }: { id: string }) => {
   const dispatch = useDispatch();
 
   const question = useSelector((state: RootState) =>
-    state.form.form.questions.find((q) => q.id === id)
+    state.formTemplate.formTemplate.questions.find((q) => q.id === id)
   );
 
   if (!question) {

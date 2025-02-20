@@ -1,5 +1,5 @@
 import { uploadImage } from '@/lib/uploadImage';
-import { updateQuestionImage } from '@/store/slices/formSlice';
+import { updateQuestionImage } from '@/store/slices/formTemplateSlice';
 import {
   ActionIcon,
   Box,

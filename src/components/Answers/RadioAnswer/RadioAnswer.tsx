@@ -10,7 +10,7 @@ import {
 import { Circle, X } from 'lucide-react';
 import { ButtonAddOption } from '@/components/Buttons/ButtonAddOption/ButtonAddOption';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateQuestionOptions } from '@/store/slices/formSlice';
+import { updateQuestionOptions } from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,7 +22,8 @@ export const RadioAnswer = ({ id }: { id: string }) => {
 
   const options = useSelector(
     (state: RootState) =>
-      state.form.form.questions.find((q) => q.id === id)?.options || []
+      state.formTemplate.formTemplate.questions.find((q) => q.id === id)
+        ?.options || []
   );
 
   const handleUpdateOption = (optionId: string, newText: string) => {

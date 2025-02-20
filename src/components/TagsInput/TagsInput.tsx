@@ -14,7 +14,7 @@ import {
 } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import { setTags } from '@/store/slices/formSlice';
+import { setTags } from '@/store/slices/formTemplateSlice';
 
 interface Tag {
   id: string;
@@ -24,7 +24,9 @@ interface Tag {
 const TagsInput = () => {
   const dispatch = useDispatch();
   const { colorScheme } = useMantineColorScheme();
-  const selectedTags = useSelector((state: RootState) => state.form.form.tags);
+  const selectedTags = useSelector(
+    (state: RootState) => state.formTemplate.formTemplate.tags
+  );
   const [tags, setAvailableTags] = useState<Tag[]>([]);
   const [value, setValue] = useState<string[]>([]);
   const [search, setSearch] = useState('');
