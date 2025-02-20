@@ -24,11 +24,11 @@ export default async function CreateTemplatePage() {
       </Container>
     );
 
-  const forms = await db.form.findMany({
-    where: { userId },
-    select: { id: true, template: { select: { title: true } } },
-    orderBy: { createdAt: 'desc' },
-  });
+  // const forms = await db.form.findMany({
+  //   where: { userId },
+  //   select: { id: true, template: { select: { title: true } } },
+  //   orderBy: { createdAt: 'desc' },
+  // });
 
   return (
     <>
@@ -59,7 +59,7 @@ export default async function CreateTemplatePage() {
           </Card>
         </Box>
 
-        {forms.length > 0 && (
+        {/* {forms.length > 0 && (
           <>
             <Title order={3}>Ваши формы</Title>
             {forms.map((form) => (
@@ -70,7 +70,7 @@ export default async function CreateTemplatePage() {
               </Card>
             ))}
           </>
-        )}
+        )} */}
       </Stack>
     </>
   );
