@@ -1,3 +1,4 @@
+'use client';
 import { Textarea } from '@mantine/core';
 import { useTranslations } from 'next-intl';
 

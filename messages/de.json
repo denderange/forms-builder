@@ -69,7 +69,10 @@
     "No text": "Kein Text",
     "Enter your answer": "Geben Sie Ihre Antwort ein",
     "Response type": "Antworttyp",
-    "Select an option": "Option auswählen"
+    "Select an option": "Option auswählen",
+    "Text": "Text",
+    "One option": "Eine Option",
+    "Several options": "Mehrere Optionen"
   },
   "TagCloud": {
     "Tag cloud": "Schlagwortwolke",
@@ -93,10 +96,5 @@
   },
   "UploadQuestionImage": {
     "Insert image": "Bild einfügen"
-  },
-  "questionTypeOptions": {
-    "Text": "Text",
-    "One option": "Eine Option",
-    "Several options": "Mehrere Optionen"
   }
 }

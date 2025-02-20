@@ -11,10 +11,10 @@ interface Question {
   questionTitle: string;
   type: string;
   options: Option[];
-  imageUrl?: string | null; // Обработаем поле imageUrl, которое может быть пустым или null
+  imageUrl?: string | null;
   isRequired: boolean;
-  position: number; // Добавляем позицию для упорядочивания вопросов
-  templateId: string; // Связь с шаблоном
+  position: number;
+  templateId: string;
 }
 
 interface Tag {

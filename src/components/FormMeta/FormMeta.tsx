@@ -1,3 +1,4 @@
+'use client';
 import { Stack, TextInput, useMantineColorScheme } from '@mantine/core';
 import {
   setAccessType,

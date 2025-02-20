@@ -1,3 +1,5 @@
+'use server';
+
 import {
   Button,
   Title,
@@ -12,10 +14,10 @@ import {
 import Link from 'next/link';
 import { auth } from '@clerk/nextjs/server';
 import { ClipboardPlus } from 'lucide-react';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
 export default async function CreateTemplatePage() {
-  const t = useTranslations('CreateTemplatePage');
+  const t = await getTranslations('CreateTemplatePage');
 
   const { userId } = await auth();
   if (!userId)

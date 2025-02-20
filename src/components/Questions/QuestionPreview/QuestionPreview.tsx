@@ -1,3 +1,4 @@
+'use client';
 import { setActiveQuestion } from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
 import {

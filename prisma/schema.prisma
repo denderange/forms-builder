@@ -20,11 +20,11 @@ enum Role {
 
 model User {
   id        String  @id @default(uuid())
-  clerkId   String  @unique
-  name      String?
-  email     String?
-  role      Role    @default(ordinary)
-  createdAt DateTime @default(now())
+  clerkId   String? @unique
+  name      String? @default("")
+  email     String? @default("")
+  role      Role?   @default(ordinary)
+  createdAt DateTime? @default(now())
 
   templates FormTemplate[]  @relation("UserTemplates")
   forms     Form[]      @relation("UserForms")
@@ -41,89 +41,89 @@ model Tag {
 
 model FormTemplate {
   id              String      @id @default(uuid())
-  formTitle       String
+  formTitle       String?     @default("")
   formDescription String?     @default("")
   questions       Question[]
-  accessType      AccessType  @default(PUBLIC)
+  accessType      AccessType? @default(PUBLIC)
   allowedUsers    String[]    @default([])
   tags            Tag[]
 
-  createdAt   DateTime     @default(now())
-  authorId    String
-  author      User         @relation("UserTemplates", fields: [authorId], references: [id])
-  theme       String?
+  createdAt   DateTime?    @default(now())
+  authorId    String?
+  author      User?        @relation("UserTemplates", fields: [authorId], references: [id])
+  theme       String?      @default("")
   comments    Comment[]    @relation("TemplateComments")
   likes       Like[]       @relation("TemplateLikes")
-  isPublic    Boolean      @default(true)
+  isPublic    Boolean?     @default(true)
 
   Form Form[] @relation("FormTemplates")
 }
 
 model Question {
   id            String   @id @default(uuid())
-  questionTitle String
-  type          String
+  questionTitle String?  @default("")
+  type          String?  @default("")
   options       QuestionOption[]
-  imageUrl      String?
-  isRequired    Boolean  @default(false)
-  position      Int 
-  formTemplateId String
-  formTemplate  FormTemplate @relation(fields: [formTemplateId], references: [id])
+  imageUrl      String?  @default("")
+  isRequired    Boolean? @default(false)
+  position      Int?     @default(0)
+  formTemplateId String?
+  formTemplate  FormTemplate? @relation(fields: [formTemplateId], references: [id])
 }
 
 model QuestionOption {
   id          String   @id @default(uuid())
-  text        String
-  questionId  String
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text        String?  @default("")
+  questionId  String?
+  question    Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model Form {
   id          String     @id @default(uuid())
-  userId      String
-  user        User       @relation("UserForms", fields: [userId], references: [id])
-  templateId  String
-  template    FormTemplate @relation("FormTemplates", fields: [templateId], references: [id])
-  title       String 
-  description String?
-  questions   Json       
-  createdAt   DateTime   @default(now())
+  userId      String?
+  user        User?       @relation("UserForms", fields: [userId], references: [id])
+  templateId  String?
+  template    FormTemplate? @relation("FormTemplates", fields: [templateId], references: [id])
+  title       String?     @default("")
+  description String?     @default("")
+  questions   Json?       @default("{}")
+  createdAt   DateTime?   @default(now())
 
   responses   Response[] @relation("FormResponses")
 }
 
 model Response {
   id        String   @id @default(uuid())
-  formId    String
-  form      Form     @relation("FormResponses", fields: [formId], references: [id])
-  questionId String
-  answer    Json
+  formId    String?
+  form      Form?     @relation("FormResponses", fields: [formId], references: [id])
+  questionId String?
+  answer    Json?     @default("{}")
 }
 
 model Comment {
   id          String   @id @default(uuid())
-  text        String
-  createdAt   DateTime @default(now())
-  userId      String
-  user        User     @relation("UserComments", fields: [userId], references: [id])
-  templateId  String
-  template    FormTemplate @relation("TemplateComments", fields: [templateId], references: [id])
+  text        String?  @default("")
+  createdAt   DateTime? @default(now())
+  userId      String?
+  user        User?     @relation("UserComments", fields: [userId], references: [id])
+  templateId  String?
+  template    FormTemplate? @relation("TemplateComments", fields: [templateId], references: [id])
 
   @@index([userId, templateId])  
 }
 
 model Like {
   id          String   @id @default(uuid())
-  userId      String
-  user        User     @relation("UserLikes", fields: [userId], references: [id])
-  templateId  String
-  template    FormTemplate @relation("TemplateLikes", fields: [templateId], references: [id])
-  createdAt   DateTime @default(now())
+  userId      String?
+  user        User?     @relation("UserLikes", fields: [userId], references: [id])
+  templateId  String?
+  template    FormTemplate? @relation("TemplateLikes", fields: [templateId], references: [id])
+  createdAt   DateTime? @default(now())
 
   @@unique([userId, templateId]) 
 }
 
 model Test {
   id    String @id @default(uuid())
-  name  String
+  name  String? @default("")
 }

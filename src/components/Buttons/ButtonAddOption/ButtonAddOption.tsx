@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@mantine/core';
 import { TicketPlus } from 'lucide-react';
 import { useTranslations } from 'next-intl';

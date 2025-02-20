@@ -69,7 +69,10 @@
     "No text": "No text",
     "Enter your answer": "Enter your answer",
     "Response type": "Response type",
-    "Select an option": "Select an option"
+    "Select an option": "Select an option",
+    "Text": "Text",
+    "One option": "One option",
+    "Several options": "Several options"
   },
   "TagCloud": {
     "Tag cloud": "Tag cloud",
@@ -93,10 +96,5 @@
   },
   "UploadQuestionImage": {
     "Insert image": "Insert image"
-  },
-  "questionTypeOptions": {
-    "Text": "Text",
-    "One option": "One option",
-    "Several options": "Several options"
   }
 }

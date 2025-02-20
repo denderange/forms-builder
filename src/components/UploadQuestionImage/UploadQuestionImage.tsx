@@ -1,3 +1,4 @@
+'use client';
 import { uploadImage } from '@/lib/uploadImage';
 import { updateQuestionImage } from '@/store/slices/formTemplateSlice';
 import {

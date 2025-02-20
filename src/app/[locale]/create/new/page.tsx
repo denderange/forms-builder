@@ -25,7 +25,7 @@ import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 
 export default function NewFormPage() {
-  const t = useTranslations('CreateNewForm');
+  const t = useTranslations('NewFormPage');
 
   const dispatch = useDispatch();
   const { isLoaded, userId } = useAuth();

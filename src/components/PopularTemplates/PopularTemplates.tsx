@@ -1,9 +1,8 @@
-// import { getPopularTemplates, Template } from '@/lib/templateService';
 import { Box, Group, Title } from '@mantine/core';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-const PopularTemplates = () => {
-  const t = useTranslations('PopularTemplates');
+const PopularTemplates = async () => {
+  const t = await getTranslations('PopularTemplates');
 
   return (
     <Box mt={'md'}>

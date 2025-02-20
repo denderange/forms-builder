@@ -1,3 +1,4 @@
+'use client';
 import { Box, Title } from '@mantine/core';
 import { useTranslations } from 'next-intl';
 

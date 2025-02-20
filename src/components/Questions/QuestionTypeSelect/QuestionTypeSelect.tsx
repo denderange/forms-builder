@@ -1,3 +1,4 @@
+'use client';
 import { Select } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -5,13 +6,18 @@ import {
   updateQuestionType,
 } from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
-import { questionTypeOptions } from '@/constants/questionTypeOptions';
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslations } from 'next-intl';
 
 export const QuestionTypeSelect = ({ id }: { id: string }) => {
   const t = useTranslations('Questions');
   const dispatch = useDispatch();
+
+  const questionTypeOptions = [
+    { value: 'text', label: t('Text') },
+    { value: 'radio', label: t('One option') },
+    { value: 'checkbox', label: t('Several options') },
+  ];
 
   const question = useSelector((state: RootState) =>
     state.formTemplate.formTemplate.questions.find((q) => q.id === id)

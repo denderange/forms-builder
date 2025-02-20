@@ -1,3 +1,4 @@
+'use client';
 import { Box, Title, Text } from '@mantine/core';
 import { useTranslations } from 'next-intl';
 import React from 'react';

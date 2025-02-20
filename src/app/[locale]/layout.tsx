@@ -42,7 +42,7 @@ export default async function RootLayout({
           />
         </head>
         <body>
-          <NextIntlClientProvider messages={messages}>
+          <NextIntlClientProvider messages={messages} locale={locale}>
             <ThemeProvider>
               <StoreProvider>
                 <Container
