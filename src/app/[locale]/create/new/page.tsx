@@ -50,7 +50,7 @@ export default function NewFormPage() {
 
   const handleSaveForm = async () => {
     if (!formTitle) {
-      toast.error(t('Please fill from the forms of the title'));
+      toast.error('Please fill from the forms of the title');
       return;
     }
 
@@ -76,13 +76,13 @@ export default function NewFormPage() {
       if (response.ok) {
         const data = await response.json();
         dispatch(setFormTemplateId(data.id));
-        toast.success(t('Form saved successfully'));
+        toast.success('Form saved successfully');
       } else {
         const errorText = await response.text();
         toast.error(`Error saving form: ${errorText}`);
       }
     } catch (error) {
-      toast.error(t('An error occurred while saving the form'));
+      toast.error('An error occurred while saving the form');
     } finally {
       dispatch(setLoading(false));
     }

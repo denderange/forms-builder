@@ -45,7 +45,7 @@ model FormTemplate {
   formDescription String?     @default("")
   questions       Question[]
   accessType      AccessType? @default(PUBLIC)
-  allowedUsers    String[]    @default([])
+  allowedUsers    Json?  
   tags            Tag[]
 
   createdAt   DateTime?    @default(now())
@@ -86,7 +86,7 @@ model Form {
   template    FormTemplate? @relation("FormTemplates", fields: [templateId], references: [id])
   title       String?     @default("")
   description String?     @default("")
-  questions   Json?       @default("{}")
+  questions   Json?     
   createdAt   DateTime?   @default(now())
 
   responses   Response[] @relation("FormResponses")
@@ -97,7 +97,7 @@ model Response {
   formId    String?
   form      Form?     @relation("FormResponses", fields: [formId], references: [id])
   questionId String?
-  answer    Json?     @default("{}")
+  answer    Json?    
 }
 
 model Comment {
