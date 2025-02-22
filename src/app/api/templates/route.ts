@@ -3,65 +3,94 @@ import { db } from '@/lib/db';
 
 export async function POST(req: NextRequest) {
   try {
-    const {
-      formTitle,
-      formDescription,
-      questions,
-      accessType,
-      allowedUsers,
-      tags,
-      authorId,
-    } = await req.json();
+    const body = await req.json();
 
-    if (!formTitle || !formDescription || !questions || !authorId) {
+    console.log('body', body);
+    console.log('Questions:', body.questions);
+
+    if (!body.formTitle || !body.authorId) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Form title and author ID are required' },
         { status: 400 }
       );
     }
 
-    const newFormTemplateData: any = {
-      formTitle,
-      formDescription,
-      accessType,
-      allowedUsers,
-      author: {
-        connect: { id: authorId },
-      },
-      questions: {
-        create: questions.map((question: any) => ({
-          questionTitle: question.questionTitle,
-          type: question.type,
-          options: {
-            create: question.options.map((option: any) => ({
-              text: option.text,
-            })),
-          },
-          imageUrl: question.imageUrl || null,
-          isRequired: question.isRequired || false,
-          position: question.position || 0,
-        })),
-      },
-    };
-
-    if (tags && tags.length > 0) {
-      newFormTemplateData.tags = {
-        create: tags.map((tag: { name: string }) => ({
-          name: tag.name,
-        })),
-      };
+    if (
+      !body.questions.length ||
+      body.questions.every((q: any) => !q.questionTitle.trim())
+    ) {
+      return NextResponse.json(
+        { error: 'At least one question must be filled in' },
+        { status: 400 }
+      );
     }
 
-    const newFormTemplate = await db.formTemplate.create({
-      data: newFormTemplateData,
+    const user = await db.user.findUnique({
+      where: { clerkId: body.authorId },
     });
 
-    return NextResponse.json(newFormTemplate, { status: 201 });
-  } catch (error) {
-    console.error('Error creating form template:', error);
-    return NextResponse.json(
-      { error: 'An error occurred while creating the form template' },
-      { status: 500 }
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 400 });
+    }
+
+    // console.log('user in db: ', user);
+
+    const existingTemplate = await db.formTemplate.findFirst({
+      where: {
+        formTitle: body.formTitle,
+        author: {
+          clerkId: body.authorId,
+        },
+      },
+    });
+
+    if (existingTemplate) {
+      return NextResponse.json(
+        { error: 'A form with this title already exists' },
+        { status: 400 }
+      );
+    }
+
+    const formTemplate = await db.formTemplate.create({
+      data: {
+        formTitle: body.formTitle,
+        formDescription: body.formDescription,
+        authorClerkId: body.authorId,
+        accessType: body.accessType,
+        allowedUsers: body.allowedUsers,
+        templateTags: body.templateTags,
+      },
+    });
+
+    await Promise.all(
+      body.questions.map((q: any, index: number) => {
+        return db.question.create({
+          data: {
+            id: q.id,
+            questionTitle: q.questionTitle,
+            type: q.type,
+            imageUrl: q.imageUrl,
+            isRequired: q.isRequired,
+            position: index,
+            formTemplateId: formTemplate.id,
+            options: {
+              create: q.options.map((option: any) => ({
+                id: option.id,
+                text: option.text,
+              })),
+            },
+          },
+        });
+      })
     );
+
+    return NextResponse.json({
+      formTemplate,
+    });
+  } catch (error) {
+    console.log('error', error);
+    if (error instanceof Error) {
+      console.error('Error stack:', error.stack);
+    }
   }
 }

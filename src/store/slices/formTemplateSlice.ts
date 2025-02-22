@@ -14,7 +14,7 @@ interface Question {
   imageUrl?: string | null;
   isRequired: boolean;
   position: number;
-  templateId: string;
+  // templateId: string;
 }
 
 interface Tag {
@@ -83,7 +83,7 @@ const formTemplateSlice = createSlice({
         imageUrl: null,
         isRequired: false,
         position: 0,
-        templateId: '',
+        // templateId: '',
       };
       state.formTemplate.questions.push(newQuestion);
       state.activeQuestionId = newQuestion.id;

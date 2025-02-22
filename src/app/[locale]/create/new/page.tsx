@@ -16,19 +16,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addQuestion,
   setFormTemplateId,
-  setLoading,
 } from '@/store/slices/formTemplateSlice';
 import { RootState } from '@/store/store';
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from '@clerk/nextjs';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 export default function NewFormPage() {
   const t = useTranslations('NewFormPage');
-
   const dispatch = useDispatch();
   const { isLoaded, userId } = useAuth();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
     formTitle,
@@ -38,55 +37,76 @@ export default function NewFormPage() {
     allowedUsers,
     tags,
   } = useSelector((state: RootState) => state.formTemplate.formTemplate);
-  const loading = useSelector((state: RootState) => state.formTemplate.loading);
-
-  const isUserLoading = !isLoaded || !userId;
-
-  useEffect(() => {
-    if (!questions.length) {
-      dispatch(addQuestion());
-    }
-  }, [dispatch, questions.length]);
 
   const handleSaveForm = async () => {
+    setIsLoading(true);
+    const formTemplateTags = tags.map((tag) => tag.name);
+
     if (!formTitle) {
-      toast.error('Please fill from the forms of the title');
+      toast.error('Please fill in the form title');
+      setIsLoading(false);
       return;
     }
 
-    dispatch(setLoading(true));
+    if (!questions.length || questions.every((q) => !q.questionTitle.trim())) {
+      toast.error('Please complete at least one question.');
+      setIsLoading(false);
+      return;
+    }
+
+    if (!userId) {
+      toast.error('User is not authenticated');
+      return;
+    }
 
     try {
       const response = await fetch('/api/templates', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-type': 'application/json',
         },
         body: JSON.stringify({
           formTitle,
           formDescription,
-          questions,
+          authorId: userId,
           accessType,
           allowedUsers,
-          tags,
-          authorId: userId,
+          templateTags: formTemplateTags,
+          questions,
         }),
       });
+      const data = await response.json();
 
-      if (response.ok) {
-        const data = await response.json();
-        dispatch(setFormTemplateId(data.id));
-        toast.success('Form saved successfully');
-      } else {
-        const errorText = await response.text();
-        toast.error(`Error saving form: ${errorText}`);
+      if (!response.ok) {
+        console.log('ERRORS: ', data.error);
+        if (data.error === 'A form with this title already exists') {
+          toast.error('A form with this name already exists!');
+        } else {
+          toast.error('Error saving form');
+        }
+        setIsLoading(false);
+        return;
       }
-    } catch (error) {
-      toast.error('An error occurred while saving the form');
+
+      // console.log('saved data: ', data);
+      toast.success('Form saved successfully');
+    } catch (error: any) {
+      // toast.error('An error occurred while saving the form');
+      if (error.message) {
+        toast(error.message);
+      }
     } finally {
-      dispatch(setLoading(false));
+      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    console.log('questions', questions);
+
+    if (!questions.length) {
+      dispatch(addQuestion());
+    }
+  }, [dispatch, questions.length]);
 
   return (
     <Box>
@@ -121,11 +141,11 @@ export default function NewFormPage() {
               color={!formTitle.length ? 'gray' : undefined}
             >
               <Button
-                loading={loading}
+                loading={isLoading}
                 size="md"
-                disabled={!formTitle.length || isUserLoading}
+                disabled={!formTitle.length || isLoading}
                 leftSection={<HardDriveDownload size={16} />}
-                onClick={handleSaveForm}
+                onClick={() => handleSaveForm()}
               >
                 {t('Save form')}
               </Button>

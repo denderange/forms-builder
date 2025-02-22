@@ -18,6 +18,11 @@ enum Role {
   ordinary
 }
 
+model Tag {
+  id        String    @id @default(uuid())
+  name      String    @unique
+}
+
 model User {
   id        String  @id @default(uuid())
   clerkId   String? @unique
@@ -26,37 +31,28 @@ model User {
   role      Role?   @default(ordinary)
   createdAt DateTime? @default(now())
 
-  templates FormTemplate[]  @relation("UserTemplates")
   forms     Form[]      @relation("UserForms")
   comments  Comment[]   @relation("UserComments")
   likes     Like[]      @relation("UserLikes")
-}
 
-model Tag {
-  id        String    @id @default(uuid())
-  name      String    @unique
-  formTemplateId String?
-  formTemplate   FormTemplate? @relation(fields: [formTemplateId], references: [id])
+  formTemplates FormTemplate[]
 }
 
 model FormTemplate {
-  id              String      @id @default(uuid())
-  formTitle       String?     @default("")
-  formDescription String?     @default("")
-  questions       Question[]
-  accessType      AccessType? @default(PUBLIC)
-  allowedUsers    Json?  
-  tags            Tag[]
+  id              String      @id @default(uuid())  //ok
+  formTitle       String      @default("")          //ok
+  formDescription String?     @default("")          //ok
+  questions       Question[] 
+  accessType      String      @default("PUBLIC")    //ok
+  allowedUsers    String[]                          //ok
+  templateTags    String[]                          //ok
+  
+  createdAt   DateTime?    @default(now())          //ok
+  authorClerkId    String                                //ok
+  theme       String?      @default("")             //ok
 
-  createdAt   DateTime?    @default(now())
-  authorId    String?
-  author      User?        @relation("UserTemplates", fields: [authorId], references: [id])
-  theme       String?      @default("")
-  comments    Comment[]    @relation("TemplateComments")
-  likes       Like[]       @relation("TemplateLikes")
-  isPublic    Boolean?     @default(true)
-
-  Form Form[] @relation("FormTemplates")
+  forms        Form[] @relation("FormTemplates")     //ok
+  author      User        @relation(fields: [authorClerkId], references: [clerkId], onDelete: Cascade)
 }
 
 model Question {
@@ -67,15 +63,16 @@ model Question {
   imageUrl      String?  @default("")
   isRequired    Boolean? @default(false)
   position      Int?     @default(0)
-  formTemplateId String?
-  formTemplate  FormTemplate? @relation(fields: [formTemplateId], references: [id])
+  
+  formTemplateId  String 
+  formTemplate    FormTemplate @relation(fields: [formTemplateId], references: [id], onDelete: Cascade)
 }
 
 model QuestionOption {
   id          String   @id @default(uuid())
   text        String?  @default("")
-  questionId  String?
-  question    Question? @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId  String
+  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 }
 
 model Form {
@@ -107,7 +104,6 @@ model Comment {
   userId      String?
   user        User?     @relation("UserComments", fields: [userId], references: [id])
   templateId  String?
-  template    FormTemplate? @relation("TemplateComments", fields: [templateId], references: [id])
 
   @@index([userId, templateId])  
 }
@@ -117,7 +113,6 @@ model Like {
   userId      String?
   user        User?     @relation("UserLikes", fields: [userId], references: [id])
   templateId  String?
-  template    FormTemplate? @relation("TemplateLikes", fields: [templateId], references: [id])
   createdAt   DateTime? @default(now())
 
   @@unique([userId, templateId]) 
