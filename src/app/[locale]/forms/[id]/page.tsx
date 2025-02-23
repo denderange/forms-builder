@@ -1,3 +1,4 @@
+'use client';
 import {
   Box,
   Title,
@@ -11,21 +12,38 @@ import {
   Group,
   List,
   Badge,
-  Divider,
   ListItem,
-  RadioGroup,
 } from '@mantine/core';
-import { getFormTemplate } from '@/lib/getFormTemplate';
 import { Asterisk } from 'lucide-react';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { FormTemplate } from '../../../../../types/formTemplate';
 
-const FormPage = async ({ params }: { params: { id: string } }) => {
-  const { id } = params;
+const FormPage = () => {
+  const params = useParams();
+  const { id } = params as { id: string };
 
-  const template = await getFormTemplate(id);
+  const [template, setTemplate] = useState<FormTemplate | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!template) {
-    return <Text c="red">Form not found</Text>;
-  }
+  useEffect(() => {
+    const fetchTemplate = async () => {
+      try {
+        const res = await fetch(`/api/templates/${id}`);
+        const data = await res.json();
+        setTemplate(data);
+      } catch (error) {
+        console.error('Failed to fetch template', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTemplate();
+  }, [id]);
+
+  if (loading) return <p>Loading...</p>;
+  if (!template) return <p>Error: Form not found</p>;
 
   return (
     <Box>
