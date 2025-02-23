@@ -1,16 +1,59 @@
 'use client';
-import { Button, Group, TextInput } from '@mantine/core';
+import {
+  Button,
+  Group,
+  Loader,
+  Paper,
+  ScrollArea,
+  TextInput,
+  Text,
+  Stack,
+  Badge,
+  Autocomplete,
+  ActionIcon,
+} from '@mantine/core';
 import { useTranslations } from 'next-intl';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
 import { SquarePen } from 'lucide-react';
 import Logo from '../Logo/Logo';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import { Link } from '@/i18n/routing';
 import ClerkButtons from '../Buttons/ClerkButtons/ClerkButtons';
+import { useDebounce } from 'use-debounce';
 
 const Header = () => {
   const t = useTranslations('Header');
+  const [query, setQuery] = useState('');
+  const [debouncedQuery] = useDebounce(query, 300);
+  const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRemoveResult = (id: string) => {
+    setResults(results.filter((result: any) => result.id !== id));
+  };
+
+  useEffect(() => {
+    const fetchForms = async () => {
+      if (!debouncedQuery.trim()) {
+        setResults([]);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/search?q=${debouncedQuery}`);
+        const data = await response.json();
+        setResults(data);
+      } catch (error) {
+        console.error('Error fetching forms', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchForms();
+  }, [debouncedQuery]);
 
   return (
     <Group
@@ -21,7 +64,18 @@ const Header = () => {
       align="center"
     >
       <Logo />
-      <TextInput placeholder={t('Search')} flex={1} />
+
+      <Autocomplete
+        placeholder={t('Search')}
+        size="md"
+        flex={1}
+        value={query}
+        onChange={setQuery}
+        rightSection={isLoading ? <Loader size="xs" color="cyan" /> : null}
+        data={results.map((result: any) => result.formTitle)}
+        onSubmit={(item: any) => setQuery(item)}
+      />
+
       <Group gap={'md'} style={{ margin: '0px auto' }}>
         <Link href={'/create'}>
           <Button

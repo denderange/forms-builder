@@ -8,8 +8,8 @@ export default function Home() {
     <>
       <Header />
       <Templates />
-      <PopularTemplates />
-      <TagCloud />
+      {/* <PopularTemplates /> */}
+      {/* <TagCloud /> */}
     </>
   );
 }
