@@ -11,7 +11,13 @@ export async function GET() {
 
   const user = await db.user.findUnique({
     where: { clerkId: userId },
-    select: { id: true, clerkId: true, role: true, createdAt: true },
+    select: {
+      id: true,
+      clerkId: true,
+      role: true,
+      createdAt: true,
+      name: true,
+    },
   });
 
   if (!user) {
@@ -37,15 +43,15 @@ export async function POST(req: Request) {
     });
 
     if (!existingUser) {
-      await db.user.create({ 
-        data: { 
-          clerkId: userId, 
+      await db.user.create({
+        data: {
+          clerkId: userId,
           name: name || null,
-          email: email || null, 
-        } 
+          email: email || null,
+        },
       });
       console.log(`User with ID ${userId} has been saved in the database`);
-    }else {
+    } else {
       await db.user.update({
         where: { clerkId: userId },
         data: {

@@ -29,6 +29,7 @@ model User {
   name      String? @default("")
   email     String? @default("")
   role      Role?   @default(ordinary)
+  apiToken     String? @unique
   createdAt DateTime? @default(now())
 
   forms     Form[]      @relation("UserForms")

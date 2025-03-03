@@ -15,12 +15,13 @@ import {
 import { useTranslations } from 'next-intl';
 import React, { useEffect, useState } from 'react';
 import { ThemeToggle } from '../ThemeToggle/ThemeToggle';
-import { SquarePen } from 'lucide-react';
+import { MonitorCog, SquarePen } from 'lucide-react';
 import Logo from '../Logo/Logo';
 import LocaleSwitcher from '../LocaleSwitcher/LocaleSwitcher';
 import { Link } from '@/i18n/routing';
 import ClerkButtons from '../Buttons/ClerkButtons/ClerkButtons';
 import { useDebounce } from 'use-debounce';
+import { SignedIn } from '@clerk/nextjs';
 
 const Header = () => {
   const t = useTranslations('Header');
@@ -86,6 +87,17 @@ const Header = () => {
             {t('Create form')}
           </Button>
         </Link>
+        <SignedIn>
+          <Link href={'/dashboard'}>
+            <Button
+              variant="gradient"
+              gradient={{ from: 'blue', to: 'cyan', deg: 90 }}
+              leftSection={<MonitorCog size={14} />}
+            >
+              Dashboard
+            </Button>
+          </Link>
+        </SignedIn>
         <ClerkButtons />
         <Group>
           <ThemeToggle />
